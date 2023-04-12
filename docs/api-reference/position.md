@@ -10,7 +10,7 @@
 class Position(NamedTuple)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\base\position.py#L4)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\base\position.py#L4)
 
 <a id="chessmaker.chess.base.position.Position.x"></a>
 
@@ -28,7 +28,7 @@ class Position(NamedTuple)
 def __str__()
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\base\position.py#L8)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\base\position.py#L8)
 
 <a id="chessmaker.chess.base.position.Position.offset"></a>
 
@@ -38,5 +38,5 @@ def __str__()
 def offset(x: int, y: int)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\base\position.py#L11)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\base\position.py#L11)
 

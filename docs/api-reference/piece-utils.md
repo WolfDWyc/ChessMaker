@@ -10,7 +10,7 @@
 def is_in_board(board: Board, position: Position) -> bool
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\pieces\piece_utils.py#L9)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\pieces\piece_utils.py#L9)
 
 <a id="chessmaker.chess.pieces.piece_utils.iterate_until_blocked"></a>
 
@@ -21,7 +21,7 @@ def iterate_until_blocked(piece: Piece,
                           direction: tuple[int, int]) -> Iterable[Position]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\pieces\piece_utils.py#L20)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\pieces\piece_utils.py#L20)
 
 <a id="chessmaker.chess.pieces.piece_utils.get_diagonals_until_blocked"></a>
 
@@ -31,7 +31,7 @@ def iterate_until_blocked(piece: Piece,
 def get_diagonals_until_blocked(piece: Piece) -> Iterable[Position]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\pieces\piece_utils.py#L39)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\pieces\piece_utils.py#L39)
 
 <a id="chessmaker.chess.pieces.piece_utils.get_horizontal_until_blocked"></a>
 
@@ -41,7 +41,7 @@ def get_diagonals_until_blocked(piece: Piece) -> Iterable[Position]
 def get_horizontal_until_blocked(piece: Piece) -> Iterable[Position]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\pieces\piece_utils.py#L44)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\pieces\piece_utils.py#L44)
 
 <a id="chessmaker.chess.pieces.piece_utils.get_vertical_until_blocked"></a>
 
@@ -51,7 +51,7 @@ def get_horizontal_until_blocked(piece: Piece) -> Iterable[Position]
 def get_vertical_until_blocked(piece: Piece) -> Iterable[Position]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\pieces\piece_utils.py#L49)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\pieces\piece_utils.py#L49)
 
 <a id="chessmaker.chess.pieces.piece_utils.get_straight_until_blocked"></a>
 
@@ -61,7 +61,7 @@ def get_vertical_until_blocked(piece: Piece) -> Iterable[Position]
 def get_straight_until_blocked(piece: Piece) -> Iterable[Position]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\pieces\piece_utils.py#L54)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\pieces\piece_utils.py#L54)
 
 <a id="chessmaker.chess.pieces.piece_utils.filter_uncapturable_positions"></a>
 
@@ -72,7 +72,7 @@ def filter_uncapturable_positions(
         piece: Piece, positions: Iterable[Position]) -> Iterable[Position]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\pieces\piece_utils.py#L59)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\pieces\piece_utils.py#L59)
 
 <a id="chessmaker.chess.pieces.piece_utils.positions_to_move_options"></a>
 
@@ -83,5 +83,5 @@ def positions_to_move_options(
         board: Board, positions: Iterable[Position]) -> Iterable[MoveOption]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\chess\pieces\piece_utils.py#L69)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\pieces\piece_utils.py#L69)
 

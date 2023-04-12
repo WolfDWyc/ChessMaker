@@ -30,10 +30,8 @@ theme:
   logo: assets/images/simple-logo-cropped-swapped.png
   favicon: assets/images/simple-logo-cropped.png
   features:
-#    - navigation.tabs
     - navigation.instant
     - navigation.tracking
-#    - navigation.sections
     - navigation.expand
     - navigation.footer
     - toc.follow

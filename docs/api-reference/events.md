@@ -11,7 +11,7 @@
 class Event()
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event.py#L5)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event.py#L5)
 
 <a id="chessmaker.events.event.CancellableEvent"></a>
 
@@ -22,7 +22,7 @@ class Event()
 class CancellableEvent(Event)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event.py#L10)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event.py#L10)
 
 <a id="chessmaker.events.event.CancellableEvent.cancelled"></a>
 
@@ -36,7 +36,7 @@ class CancellableEvent(Event)
 def set_cancelled(cancelled: bool)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event.py#L13)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event.py#L13)
 
 <a id="chessmaker.events.event_priority"></a>
 
@@ -50,7 +50,7 @@ def set_cancelled(cancelled: bool)
 class EventPriority(int, Enum)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_priority.py#L4)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_priority.py#L4)
 
 <a id="chessmaker.events.event_priority.EventPriority.VERY_LOW"></a>
 
@@ -84,7 +84,7 @@ class EventPriority(int, Enum)
 class EventPublisher(Generic[TEvent])
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L16)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L16)
 
 <a id="chessmaker.events.event_publisher.EventPublisher.__init__"></a>
 
@@ -95,7 +95,7 @@ def __init__(subscribers: dict[Type[TEvent], list[_Subscriber]] = None,
              subscribers_to_all: list[_Subscriber] = None)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L17)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L17)
 
 <a id="chessmaker.events.event_publisher.EventPublisher.subscribe"></a>
 
@@ -107,7 +107,7 @@ def subscribe(event_type: Type[TEvent],
               priority: int = EventPriority.NORMAL)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L28)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L28)
 
 <a id="chessmaker.events.event_publisher.EventPublisher.unsubscribe"></a>
 
@@ -117,7 +117,7 @@ def subscribe(event_type: Type[TEvent],
 def unsubscribe(event_type: Type[TEvent], callback: Callable[[TEvent], None])
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L32)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L32)
 
 <a id="chessmaker.events.event_publisher.EventPublisher.subscribe_to_all"></a>
 
@@ -128,7 +128,7 @@ def subscribe_to_all(callback: Callable[[TEvent], None],
                      priority: int = EventPriority.NORMAL)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L36)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L36)
 
 <a id="chessmaker.events.event_publisher.EventPublisher.unsubscribe_from_all"></a>
 
@@ -138,7 +138,7 @@ def subscribe_to_all(callback: Callable[[TEvent], None],
 def unsubscribe_from_all(callback: Callable[[TEvent], None])
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L41)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L41)
 
 <a id="chessmaker.events.event_publisher.EventPublisher.publish"></a>
 
@@ -148,7 +148,7 @@ def unsubscribe_from_all(callback: Callable[[TEvent], None])
 def publish(event: TEvent)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L46)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L46)
 
 <a id="chessmaker.events.event_publisher.EventPublisher.propagate"></a>
 
@@ -160,7 +160,7 @@ def propagate(publisher: 'EventPublisher',
               priority: int = EventPriority.NORMAL)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L56)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L56)
 
 For all events publisher publishes of type event_type, publish them to self
 
@@ -173,7 +173,7 @@ def propagate_all(publisher: 'EventPublisher',
                   priority: int = EventPriority.NORMAL)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/dc56d4841f94820eba4c40c003f75d8396c128d9/chessmaker\events\event_publisher.py#L65)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\events\event_publisher.py#L65)
 
 For all events publisher publishes, publish them to self
 
