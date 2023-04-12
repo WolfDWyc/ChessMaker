@@ -1,0 +1,2 @@
+pywebio==1.7.1
+pywebio-battery==0.4.0

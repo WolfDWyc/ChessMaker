@@ -1,0 +1,74 @@
+site_name: ChessMaker
+repo_url: https://github.com/WolfDWyc/ChessMaker.git
+repo_name: WolfDWyc/ChessMaker
+nav:
+  - ChessMaker: index.md
+  - Getting started - Creating a custom game: getting-started.md
+  - Creating new variants:
+      - First steps: guide/first-steps.md
+      - Concepts:
+          - Events: guide/concepts/events.md
+          - Base Game: guide/concepts/base-game.md
+          - Cloneables: guide/concepts/cloneables.md
+      - Tutorials:
+          - Siberian Swipe: guide/tutorials/siberian-swipe.md
+  - API Reference:
+      - Events: api-reference/events.md
+      - Piece Utilities: api-reference/piece-utils.md
+      - Game: api-reference/game.md
+      - Board: api-reference/board.md
+      - Player: api-reference/player.md
+      - Position: api-reference/position.md
+      - Square: api-reference/square.md
+      - Piece: api-reference/piece.md
+      - MoveOption: api-reference/move-option.md
+      - Rule: api-reference/rule.md
+
+
+theme:
+  name: material
+  logo: assets/images/simple-logo-cropped-swapped.png
+  favicon: assets/images/simple-logo-cropped.png
+  features:
+#    - navigation.tabs
+    - navigation.instant
+    - navigation.tracking
+#    - navigation.sections
+    - navigation.expand
+    - navigation.footer
+    - toc.follow
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotate
+    - content.code.copy
+  language: en
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

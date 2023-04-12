@@ -1,0 +1,90 @@
+processors:
+- type: filter
+  documented_only: false
+- type: smart
+- type: crossref
+renderer:
+  type: mkdocs
+  markdown:
+    source_linker:
+      type: github
+      repo: WolfDWyc/ChessMaker
+    descriptive_class_title: false
+    render_typehint_in_data_header: true
+  content_directory_name: ""
+  output_directory: docs/api-reference
+  pages:
+  - title: Events
+    name: events
+    contents:
+    - src.events.event_publisher.EventPublisher.*
+    - src.events.event.Event
+    - src.events.event.CancellableEvent.*
+    - src.events.event_priority.EventPriority.*
+  - title: Piece Utils
+    name: piece-utils
+    contents:
+    - src.chess.pieces.piece_utils.is_in_board
+    - src.chess.pieces.piece_utils.iterate_until_blocked
+    - src.chess.pieces.piece_utils.get_diagonals_until_blocked
+    - src.chess.pieces.piece_utils.get_horizontal_until_blocked
+    - src.chess.pieces.piece_utils.get_vertical_until_blocked
+    - src.chess.pieces.piece_utils.get_straight_until_blocked
+    - src.chess.pieces.piece_utils.filter_uncapturable_positions
+    - src.chess.pieces.piece_utils.positions_to_move_options
+  - title: Game
+    name: game
+    contents:
+    - src.chess.base.game.Game.*
+    - src.chess.base.game.AfterGameEndEvent.*
+  - title: Board
+    name: board
+    contents:
+    - src.chess.base.board.Board.*
+    - src.chess.base.board.AfterNewPieceEvent.*
+    - src.chess.base.board.AfterRemoveSquareEvent.*
+    - src.chess.base.board.BeforeRemoveSquareEvent
+    - src.chess.base.board.AfterAddSquareEvent.*
+    - src.chess.base.board.BeforeAddSquareEvent.*
+    - src.chess.base.board.BeforeTurnChangeEvent.*
+    - src.chess.base.board.AfterTurnChangeEvent.*
+  - title: Player
+    name: player
+    contents:
+    - src.chess.base.player.Player.*
+  - title: Position
+    name: position
+    contents:
+    - src.chess.base.position.Position.*
+  - title: Square
+    name: square
+    contents:
+    - src.chess.base.square.Square.*
+    - src.chess.base.square.AfterAddPieceEvent.*
+    - src.chess.base.square.BeforeAddPieceEvent.*
+    - src.chess.base.square.BeforeRemovePieceEvent.*
+    - src.chess.base.square.AfterRemovePieceEvent
+  - title: Piece
+    name: piece
+    contents:
+    - src.chess.base.piece.Piece.*
+    - src.chess.base.piece.AfterGetMoveOptionsEvent.*
+    - src.chess.base.piece.BeforeGetMoveOptionsEvent.*
+    - src.chess.base.piece.AfterMoveEvent.*
+    - src.chess.base.piece.BeforeMoveEvent.*
+    - src.chess.base.piece.AfterCaptureEvent.*
+    - src.chess.base.piece.BeforeCaptureEvent
+    - src.chess.base.piece.PieceEventTypes
+  - title: Move Option
+    name: move-option
+    contents:
+    - src.chess.base.move_option.MoveOption.*
+  - title: Rule
+    name: rule
+    contents:
+    - src.chess.base.rule.Rule.*
+    - src.chess.base.rule.as_rule
+
+
+
+

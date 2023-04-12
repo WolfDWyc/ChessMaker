@@ -1,0 +1,3 @@
+
+class Knookable:
+    pass

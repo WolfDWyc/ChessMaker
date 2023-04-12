@@ -1,3 +1,8 @@
+.idea
+# Unused pydoc-markdown files
+docs/api-reference/.generated-files.txt
+docs/api-reference/mkdocs.yml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
