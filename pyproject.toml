@@ -21,7 +21,6 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Topic :: Games/Entertainment :: Board Games",
     "Topic :: Games/Entertainment :: Turn Based Strategy",
-    "Topic :: Games/Entertainment :: Chess",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 keywords = ["chess"]
