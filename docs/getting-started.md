@@ -13,8 +13,8 @@ $ pip install chessmaker
 This is what runs on the online example.
 
 ```python
-from src.chess.game_factory import create_game
-from src.clients.pywebio_ui import start_pywebio_chess_server
+from chessmaker.chess import create_game
+from chessmaker.clients import start_pywebio_chess_server
 
 if __name__ == "__main__":
     start_pywebio_chess_server(
@@ -44,18 +44,18 @@ This one won't support any custom rules - just the standard chess rules.
 
 from itertools import cycle
 
-from src.chess.base.board import Board
-from src.chess.base.game import Game
-from src.chess.base.player import Player
-from src.chess.base.square import Square
-from src.chess.pieces.bishop import Bishop
-from src.chess.pieces.king import King
-from src.chess.pieces.knight import Knight
-from src.chess.pieces.pawn import Pawn
-from src.chess.pieces.queen import Queen
-from src.chess.pieces.rook import Rook
-from src.chess.results.simple_result import GetSimpleResult
-from src.clients.pywebio_ui import start_pywebio_chess_server
+from chessmaker.chess.base import Board
+from chessmaker.chess.base import Game
+from chessmaker.chess.base import Player
+from chessmaker.chess.base import Square
+from chessmaker.chess.pieces import Bishop
+from chessmaker.chess.pieces import King
+from chessmaker.chess.pieces import Knight
+from chessmaker.chess.pieces import Pawn
+from chessmaker.chess.pieces import Queen
+from chessmaker.chess.pieces import Rook
+from chessmaker.chess.results import GetSimpleResult
+from chessmaker.clients import start_pywebio_chess_server
 
 
 def _empty_line(length: int) -> list[Square]:
@@ -142,15 +142,15 @@ In this example, we'll create a 5x5 board, pawns on the corners, kings in the mi
 ```python
 from itertools import cycle
 
-from src.chess.base.board import Board
-from src.chess.base.game import Game
-from src.chess.base.player import Player
-from src.chess.base.square import Square
-from src.chess.pieces.bishop import Bishop
-from src.chess.pieces.king import King
-from src.chess.pieces.pawn import Pawn
-from src.chess.results.simple_result import GetSimpleResult
-from src.clients.pywebio_ui import start_pywebio_chess_server
+from chessmaker.chess.base import Board
+from chessmaker.chess.base import Game
+from chessmaker.chess.base import Player
+from chessmaker.chess.base import Square
+from chessmaker.chess.pieces import Bishop
+from chessmaker.chess.pieces import King
+from chessmaker.chess.pieces import Pawn
+from chessmaker.chess.results import GetSimpleResult
+from chessmaker.clients import start_pywebio_chess_server
 
 def _empty_line(length: int) -> list[Square]:
     return [Square() for _ in range(length)]

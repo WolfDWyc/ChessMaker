@@ -18,8 +18,8 @@ to be completely immutable, and for **before** events to have mutable attributes
 
 ```python
 from dataclasses import dataclass
-from src.events import Event
-from src.chess.base.move_option import MoveOption
+from chessmaker.events import Event
+from chessmaker.chess.base.move_option import MoveOption
 
 # An immutable event
 @dataclass(frozen=True)
@@ -38,7 +38,7 @@ Events can also inherit from the `CancellableEvent` class,
 which adds a `cancelled` attribute and a `set_cancelled` function to the event.
 
 ```python
-from src.events import CancellableEvent
+from chessmaker.events import CancellableEvent
 
 class BeforeMoveEvent(AfterMoveEvent, CancellableEvent):
     def set_move_option(self, move_option: MoveOption):
@@ -60,7 +60,6 @@ it will only subscribe to that specific pawn - not all pawns.
 
 ```python
 import random
-from src.chess.base.board import BeforeTurnChangeEvent, Board
 
 board: Board = ...
 
@@ -89,7 +88,7 @@ but if you need to ensure your event is called before or after another event,
 You can either use the `EventPriority` enum to specify a priority, or use an integer for more fine-grained control.
 
 ```python
-from src.events import EventPriority
+from chessmaker.events import EventPriority
 
 board.subscribe(BeforeTurnChangeEvent, on_after_turn_change)
 board.subscribe(BeforeTurnChangeEvent, on_after_turn_change, priority=EventPriority.VERY_LOW)
@@ -128,7 +127,7 @@ using generics and unions.
 
 ```python
 
-from src.events import EventPublisher
+from chessmaker.events import EventPublisher
 
 class MyPrinter(EventPublisher[BeforePrintEvent | AfterPrintEvent]):
     

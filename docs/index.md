@@ -7,7 +7,7 @@ to support any custom rule or feature.
 
 ## What is ChessMaker?
 
-ChessMaker is a Python (3.10+) chess implementation that can be extended to support any custom rule or feature.
+ChessMaker is a Python (3.11+) chess implementation that can be extended to support any custom rule or feature.
 It allows you to build almost any variant you can think of easily and quickly.
 
 ChessMaker isn't tied to any GUI, but comes with a thin, [pywebio](https://pywebio.readthedocs.io/en/latest/), multiplayer web interface.
