@@ -44,7 +44,7 @@ It also contains the players and the turn iterator.
 It's important to understand is that even though the board contains a turn iterator,
 it (or the Game itself) doesn't actually manage a game loop - it leaves that to any client.
 
-A board contains a 2D list of squares - these squares can be Non (e.g. holes) 
+A board contains a 2D list of squares - these squares can be None (e.g. holes) 
 to create non-rectangular boards. When a square in the board changes (Not to confuse with when a piece changes)
 the board can publish `BeforeRemoveSquareEvent`, `AfterRemoveSquareEvent`, `BeforeAddSquareEvent` and `AfterAddSquareEvent`.
 
@@ -62,7 +62,7 @@ It also contains a lot of utility methods for getting squares, pieces and player
 board = Board(squares, players, turn_iterator)
 
 # Get a square
-square = board[0][0]
+square = board[Position(0, 0)]
 piece = square.piece
 
 for square in board:
@@ -102,7 +102,7 @@ print(position[0], position[1])
 print(position.offset(1, 1))
 ```
 
-!!! tip
+!!! info
     While both pieces and squares have a `position` attribute, it doesn't need to be changed manually.
     instead the board knows where each piece and square is, and the `position` attribute
     simply asks the board for its position.
@@ -117,7 +117,7 @@ The square has an (auto-updating) `position` attribute, and a `piece` attribute.
 ```python
 
 board = ...
-square = board[0][0]
+square = board[Position(0, 0)]
 print(square.position, square.piece)
 
 square.subscribe(AfterAddPieceEvent, lambda event: print(event.piece))
@@ -135,7 +135,7 @@ It also has a `name` class attribute, which is used for display purposes.
 The piece also has a `board` attribute, which is set when the piece is added to a board.
 Because the piece is created before it's added to the board, trying to access it when it's created will result in an
 error saying `Piece is not on the board yet`. A common practice on how to do this properly 
-for the piece to subscribe to the `AfterNewPieceEvent` event of itself in it's `__init__` method.
+for the piece to subscribe to the `AfterNewPieceEvent` event of itself in its `__init__` method.
 
 Each piece has to implement a `_get_move_options` method, which returns an iterable of what moves the piece can make.
 Then, when the piece is asked for its move options, it will call the `_get_move_options` method and publish
@@ -214,8 +214,8 @@ A rule is a class that can be used to add custom logic to the game.
 It is also an abstract class, and must be extended to be used.
 
 A rule should define startup logic in `on_join_board` - and only startup logic (e.g. subscribing to events).
-The board passed shouldn't be kept in state - instead, callbacks should use the board from the event.
-(This is again related to cloneables, and will be explained in the next section.)
+The board passed shouldn't be kept in state - instead, callbacks should use the board from the event
+(This is again related to cloneables, and will be explained in the next section).
 
 An `as_rule` method is provided to turn a function into a rule, which is useful for stateless rules.
 

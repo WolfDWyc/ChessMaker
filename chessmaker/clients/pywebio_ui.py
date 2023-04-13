@@ -352,5 +352,5 @@ def start_pywebio_chess_server(
 
 
 if __name__ == "__main__":
-    start_pywebio_chess_server(create_game, ["chess960", "knooks", "force_en_passant", "knight_boosting", "omnipotent_f6_pawn",
+    start_pywebio_chess_server(create_game, ["chess960", "knooks", "forced_en_passant", "knight_boosting", "omnipotent_f6_pawn",
                               "siberian_swipe", "il_vaticano", "beta_decay"], debug=True)

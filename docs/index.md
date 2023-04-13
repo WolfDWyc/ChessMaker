@@ -3,6 +3,10 @@
 An easily extendible chess implementation designed
 to support any custom rule or feature.
 
+**Documentation**: [https://wolfdwyc.github.io/ChessMaker](https://wolfdwyc.github.io/ChessMaker)
+
+**Source Code**: [https://github.com/WolfDWyc/ChessMaker](https://wolfdwyc.github.io/ChessMaker)
+
 ---
 
 ## What is ChessMaker?
@@ -12,13 +16,13 @@ It allows you to build almost any variant you can think of easily and quickly.
 
 ChessMaker isn't tied to any GUI, but comes with a thin, [pywebio](https://pywebio.readthedocs.io/en/latest/), multiplayer web interface.
 
-It was inspired by [r/AnarchyChess](https://www.reddit.com/r/AnarchyChess/) - and the pacakged optional rules are almost all inspired by that subreddit.
+It was inspired by [r/AnarchyChess](https://www.reddit.com/r/AnarchyChess/) - and the packaged optional rules are almost all inspired by that subreddit.
 
-The packaged optional rules are:
+These rules are:
 
 * Chess960
 * Knooks
-* Force En Passant
+* Forced En Passant
 * Knight Boosting
 * Siberian Swipe
 * Il Vaticano

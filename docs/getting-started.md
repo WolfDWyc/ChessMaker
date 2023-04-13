@@ -19,7 +19,7 @@ from chessmaker.clients import start_pywebio_chess_server
 if __name__ == "__main__":
     start_pywebio_chess_server(
         game_factory=create_game, # (1)
-        supported_options=["chess960", "knooks", "force_en_passant", "knight_boosting", "omnipotent_f6_pawn",
+        supported_options=["chess960", "knooks", "forced_en_passant", "knight_boosting", "omnipotent_f6_pawn",
                            "siberian_swipe", "il_vaticano", "beta_decay"],
         remote_access=True # (2)
     )

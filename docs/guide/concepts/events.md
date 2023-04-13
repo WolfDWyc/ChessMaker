@@ -82,10 +82,10 @@ board.subscribe(BeforeTurnChangeEvent, on_after_turn_change)
 ### Event Priorities
 Events can be subscribed to with a priority, which determines the order in which they are called -
 a higher priority means the event is called earlier.
+
 For most use cases, the default priority of `0` is fine,
 but if you need to ensure your event is called before or after another event,
-
-You can either use the `EventPriority` enum to specify a priority, or use an integer for more fine-grained control.
+you can either use the `EventPriority` enum to specify a priority, or use an integer for more fine-grained control.
 
 ```python
 from chessmaker.events import EventPriority
@@ -141,8 +141,8 @@ class MyPrinter(EventPublisher[BeforePrintEvent | AfterPrintEvent]):
 ```
 
 ### Propagating events
-Sometimes, you may want to to publish events from a publisher to another publisher.
-You can do this either to all events types, or to a specific event type.
+Sometimes, you may want to publish events from a publisher to another one.
+You can do this either to all event types, or to a specific one.
 
 ```python
 
@@ -154,11 +154,11 @@ class MyPrinterManager(EventPublisher[BeforePrintEvent | AfterPrintEvent]):
         self.my_printer.propagate(BeforePrintEvent, self)
 ```
 
-In this way, every time the printer publishes an event, the manager will also publish it.
+Now, every time the printer publishes an event, the manager will also publish it.
 Currently, you can not unpropagate events.
 
 !!! info
-    The main use of this in the game is the board propagating all events of it's pieces and squares to itself.
+    The main use of this in the game is the board propagating all events of its pieces and squares to itself.
     This means that instead of subscribing to a specific piece move, you can subscribe to all pieces moving by subscribing to the board.
 
 

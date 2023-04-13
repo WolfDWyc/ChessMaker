@@ -9,7 +9,7 @@ from chessmaker.chess.pieces.pawn import Pawn
 from chessmaker.events import EventPriority
 
 
-class ForceEnPassant(Rule):
+class ForcedEnPassant(Rule):
     def __init__(self, can_en_passant: dict[Player, bool] = None):
         if can_en_passant is None:
             can_en_passant = defaultdict(lambda: False)
@@ -40,7 +40,7 @@ class ForceEnPassant(Rule):
         event.set_move_options(move_options)
 
     def clone(self):
-        return ForceEnPassant(can_en_passant=self.can_en_passant.copy())
+        return ForcedEnPassant(can_en_passant=self.can_en_passant.copy())
 
 
 

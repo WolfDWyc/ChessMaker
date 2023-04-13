@@ -16,7 +16,7 @@ from chessmaker.chess.pieces.pawn import Pawn
 from chessmaker.chess.pieces.queen import Queen
 from chessmaker.chess.pieces.rook import Rook
 from chessmaker.chess.results.simple_result import GetSimpleResult
-from chessmaker.chess.rules import ForceEnPassant, KnightBoosting, OmnipotentF6Pawn, SiberianSwipe, IlVaticano, BetaDecay
+from chessmaker.chess.rules import ForcedEnPassant, KnightBoosting, OmnipotentF6Pawn, SiberianSwipe, IlVaticano, BetaDecay
 
 class A:
     pass
@@ -24,7 +24,7 @@ class A:
 def create_game(
         chess960: bool = False,
         knooks: bool = False,
-        force_en_passant: bool = False,
+        forced_en_passant: bool = False,
         knight_boosting: bool = False,
         omnipotent_f6_pawn: bool = False,
         siberian_swipe: bool = False,
@@ -80,7 +80,7 @@ def create_game(
 
     rules = []
     for enabled, rule in [
-        (force_en_passant, ForceEnPassant()),
+        (forced_en_passant, ForcedEnPassant()),
         (knight_boosting, KnightBoosting()),
         (siberian_swipe, SiberianSwipe()),
         (il_vaticano, IlVaticano()),
