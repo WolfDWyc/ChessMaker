@@ -10,6 +10,7 @@ from chessmaker.chess.pieces.piece_utils import iterate_until_blocked
 from chessmaker.chess.pieces.queen import Queen
 from chessmaker.events import EventPriority
 
+sign = lambda x: x and (1, -1)[x < 0]
 
 class BetaDecay(Rule):
     def __init__(self, decay_to_pieces: list[Callable[[Player], Piece]]):
