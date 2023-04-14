@@ -1,0 +1,5 @@
+pywebio-battery==0.4.0 ; python_version >= "3.11" and python_version < "4.0"
+pywebio==1.7.1 ; python_version >= "3.11" and python_version < "4.0"
+tornado==6.2 ; python_version >= "3.11" and python_version < "4.0"
+ua-parser==0.16.1 ; python_version >= "3.11" and python_version < "4.0"
+user-agents==2.2.0 ; python_version >= "3.11" and python_version < "4.0"
