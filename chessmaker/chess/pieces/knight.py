@@ -3,7 +3,7 @@ from typing import Iterable
 
 from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.piece import Piece
-from chessmaker.chess.pieces.piece_utils import filter_uncapturable_positions, is_in_board, positions_to_move_options
+from chessmaker.chess.piece_utils import filter_uncapturable_positions, is_in_board, positions_to_move_options
 
 MOVE_OFFSETS = [(1, 2), (2, 1), (2, -1), (1, -2), (-1, -2), (-2, -1), (-2, 1), (-1, 2)]
 

@@ -2,6 +2,8 @@
 
 # chessmaker.chess.base.position
 
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\position.py#L1)
+
 <a id="chessmaker.chess.base.position.Position"></a>
 
 ## Position
@@ -10,15 +12,19 @@
 class Position(NamedTuple)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\base\position.py#L4)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\position.py#L4)
 
 <a id="chessmaker.chess.base.position.Position.x"></a>
 
 #### x: `int`
 
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\position.py#L5)
+
 <a id="chessmaker.chess.base.position.Position.y"></a>
 
 #### y: `int`
+
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\position.py#L6)
 
 <a id="chessmaker.chess.base.position.Position.__str__"></a>
 
@@ -28,7 +34,7 @@ class Position(NamedTuple)
 def __str__()
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\base\position.py#L8)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\position.py#L8)
 
 <a id="chessmaker.chess.base.position.Position.offset"></a>
 
@@ -38,5 +44,5 @@ def __str__()
 def offset(x: int, y: int)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\base\position.py#L11)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\position.py#L11)
 

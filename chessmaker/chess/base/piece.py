@@ -10,35 +10,41 @@ from chessmaker.events import EventPublisher, Event, CancellableEvent
 if TYPE_CHECKING:
     from chessmaker.chess.base.board import Board
 
+
 @dataclass(frozen=True)
 class AfterGetMoveOptionsEvent(Event):
     piece: "Piece"
     move_options: Iterable[MoveOption]
 
+
 class BeforeGetMoveOptionsEvent(AfterGetMoveOptionsEvent):
     def set_move_options(self, move_options: Iterable[MoveOption]):
         self._set("move_options", move_options)
+
 
 @dataclass(frozen=True)
 class AfterMoveEvent(Event):
     piece: "Piece"
     move_option: MoveOption
 
+
 class BeforeMoveEvent(AfterMoveEvent, CancellableEvent):
     def set_move_option(self, move_option: MoveOption):
         self._set("move_option", move_option)
 
+
 @dataclass(frozen=True)
-class AfterCaptureEvent(Event):
-    capturing_piece: "Piece"
+class AfterCapturedEvent(Event):
     captured_piece: "Piece"
 
-class BeforeCaptureEvent(AfterCaptureEvent):
+
+class BeforeCapturedEvent(AfterCapturedEvent):
     pass
 
 
-PieceEventTypes = AfterGetMoveOptionsEvent | BeforeGetMoveOptionsEvent | AfterMoveEvent | BeforeMoveEvent |\
-                  AfterCaptureEvent | BeforeCaptureEvent
+PieceEventTypes = AfterGetMoveOptionsEvent | BeforeGetMoveOptionsEvent | AfterMoveEvent | BeforeMoveEvent | \
+                  AfterCapturedEvent | BeforeCapturedEvent
+
 
 class Piece(EventPublisher[PieceEventTypes], Cloneable):
     def __init__(self, player: Player):
@@ -74,13 +80,16 @@ class Piece(EventPublisher[PieceEventTypes], Cloneable):
 
         for capture_position in move_option.captures:
             capture_piece = self.board[capture_position].piece
-            self.publish(BeforeCaptureEvent(self, capture_piece))
+            capture_piece.publish(BeforeCapturedEvent(capture_piece))
             self.board[capture_position].piece = None
-            self.publish(AfterCaptureEvent(self, capture_piece))
+            capture_piece.publish(AfterCapturedEvent(capture_piece))
 
         destination.piece = self
 
         self.publish(AfterMoveEvent(self, move_option))
+
+    def on_join_board(self):
+        pass
 
     @property
     def player(self):
@@ -99,7 +108,7 @@ class Piece(EventPublisher[PieceEventTypes], Cloneable):
     @classmethod
     @property
     @abstractmethod
-    def name(self):
+    def name(cls):
         raise NotImplementedError
 
     @abstractmethod

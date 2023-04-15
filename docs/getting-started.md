@@ -10,18 +10,20 @@ $ pip install chessmaker
 
 ### Using the provided game factory
 
-This is what runs on the online example.
+This is what runs on the online example:
 
 ```python
 from chessmaker.chess import create_game
-from chessmaker.clients import start_pywebio_chess_server
+from chessmaker.clients import start_pywebio_chess_server, PIECE_URLS
 
 if __name__ == "__main__":
     start_pywebio_chess_server(
-        game_factory=create_game, # (1)
+        create_game, # (1)
         supported_options=["chess960", "knooks", "forced_en_passant", "knight_boosting", "omnipotent_f6_pawn",
-                           "siberian_swipe", "il_vaticano", "beta_decay"],
-        remote_access=True # (2)
+                           "siberian_swipe", "il_vaticano", "beta_decay", "la_bastarda", "king_cant_move_to_c2",
+                           "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win"], 
+        piece_urls=PIECE_URLS | {"Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"]}, # (2)
+        remote_access=True # (3)
     )
 
 ```
@@ -31,10 +33,14 @@ The factory function should accept a list of boolean keyword arguments, which ar
 Accepting options are useful if you want to host a server that supports multiple variants of chess, but most of the time you know what variant you want to play,
 so it's not needed.
 
-2. The **remote_access** argument puts the server on the internet, using pywebio's remote access feature (which internally uses localhost.run).
+2. In order to use custom pieces, you need to provide the URLs of the images as a tuple with a URL
+for each player.
+
+3. The **remote_access** argument puts the server on the internet, so you can play with your friends!
+It uses pywebio's remote access feature (which internally uses [http://localhost.run](http://localhost.run)).
 
 
-### Creating a basic game
+### Creating a standard game factory
 
 Now, let's make our own game factory.
 This one won't support any custom rules - just the standard chess rules.
@@ -54,7 +60,7 @@ from chessmaker.chess.pieces import Knight
 from chessmaker.chess.pieces import Pawn
 from chessmaker.chess.pieces import Queen
 from chessmaker.chess.pieces import Rook
-from chessmaker.chess.results import GetSimpleResult
+from chessmaker.chess.results import checkmate, stalemate, Repetition, NoCapturesOrPawnMoves
 from chessmaker.clients import start_pywebio_chess_server
 
 
@@ -69,29 +75,42 @@ def _up_pawn(player: Player) -> Pawn:
 def _down_pawn(player: Player) -> Pawn:
     return Pawn(player, Pawn.Direction.DOWN, promotions=[Bishop, Rook, Queen, Knight])
 
+
+def get_result(board: Board) -> str:
+    for result_function in [checkmate, stalemate, Repetition(3), NoCapturesOrPawnMoves(50)]:
+        result = result_function(board)
+        if result:
+            return result
+
 piece_row = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
 
-def create_game() -> Game:
+def create_game(**_) -> Game:
     white = Player("white")
     black = Player("black")
     turn_iterator = cycle([white, black])
+    
+    def _pawn(player: Player):
+        if player == white:
+            return _up_pawn(player)
+        elif player == black:
+            return _down_pawn(player)
 
     game = Game(
         board=Board(
             squares=[
                 [Square(piece_row[i](black)) for i in range(8)],
-                [Square(_down_pawn(black)) for _ in range(8)],
+                [Square(_pawn(black)) for _ in range(8)],
                 _empty_line(8),
                 _empty_line(8),
                 _empty_line(8),
                 _empty_line(8),
-                [Square(_up_pawn(white)) for _ in range(8)],
+                [Square(_pawn(white)) for _ in range(8)],
                 [Square(piece_row[i](white)) for i in range(8)],
             ],
             players=[white, black],
             turn_iterator=turn_iterator,
         ),
-        get_result=GetSimpleResult(),
+        get_result=get_result,
     )
 
     return game
@@ -106,7 +125,8 @@ We aren't going to get into the details of how things work behind the scenes yet
 Our **game** object is created with 2 arguments. Let's start with the simpler one.
 
 The **get_result** argument is the function that will be called to determine the result of the game.
-`GetSimpleResult` is a result function that handles the standard chess rules - checkmate, stalemate, repitition, 50 move rule, etc.
+We create a result function that checks for all the standard end conditions: checkmate, stalemate, repetition, and the 50 move rule.
+For simplicity, we could have also imported `standard_result`for the same effect.
 
 The **board** argument is the main object we'll be working with, and it is created with 3 arguments.
 Again, let's do the simpler arguments first.
@@ -132,9 +152,9 @@ We can do this using the **direction** and **promotions** arguments.
 The result is a complete chess game, with all the standard rules:
 
 
-![Basic game](/assets/images/basic_game.png)
+![Basic game](assets/images/basic_game.png)
 
-### Creating a custom game
+### Creating a custom game factory
 
 Now that we've seen how to create a basic game factory, let's look at how to create a custom one.
 In this example, we'll create a 5x5 board, pawns on the corners, kings in the middle of the edge ranks, bishops between the pawns and the kings - and a hole in the middle of the board.
@@ -149,7 +169,7 @@ from chessmaker.chess.base import Square
 from chessmaker.chess.pieces import Bishop
 from chessmaker.chess.pieces import King
 from chessmaker.chess.pieces import Pawn
-from chessmaker.chess.results import GetSimpleResult
+from chessmaker.chess.results import standard_result
 from chessmaker.clients import start_pywebio_chess_server
 
 def _empty_line(length: int) -> list[Square]:
@@ -163,24 +183,30 @@ def _up_pawn(player: Player) -> Pawn:
 def _down_pawn(player: Player) -> Pawn:
     return Pawn(player, Pawn.Direction.DOWN, promotions=[Bishop])
 
-def create_custom_game():
+def create_custom_game(*_):
     white = Player("white")
     black = Player("black")
     turn_iterator = cycle([white, black])
+    
+    def _pawn(player: Player):
+        if player == white:
+            return _up_pawn(player)
+        elif player == black:
+            return _down_pawn(player)
 
     game = Game(
         board=Board(
             squares=[
-                [Square(piece(black)) for piece in [_down_pawn, Bishop, King, Bishop, _down_pawn]],
+                [Square(piece(black)) for piece in [_pawn, Bishop, King, Bishop, _down_pawn]],
                 _empty_line(5),
                 _empty_line(2) + [None] + _empty_line(2),
                 _empty_line(5),
-                [Square(piece(white)) for piece in [_up_pawn, Bishop, King, Bishop, _up_pawn]],
+                [Square(piece(white)) for piece in [_pawn, Bishop, King, Bishop, _up_pawn]],
             ],
             players=[white, black],
             turn_iterator=turn_iterator,
         ),
-        get_result=GetSimpleResult(),
+        get_result=standard_result,
     )
 
     return game
@@ -192,7 +218,7 @@ if __name__ == "__main__":
 
 And the result:
 
-![Custom game](/assets/images/custom_5x5_game.png)
+![Custom game](assets/images/custom_5x5_game.png)
 
 
 

@@ -2,7 +2,7 @@ from .board import Board, BeforeTurnChangeEvent, AfterTurnChangeEvent, AfterNewP
                     BeforeRemoveSquareEvent, AfterAddSquareEvent, AfterRemoveSquareEvent
 from .game import Game, AfterGameEndEvent
 from .piece import Piece, PieceEventTypes, AfterMoveEvent, BeforeMoveEvent, AfterGetMoveOptionsEvent, \
-                    BeforeGetMoveOptionsEvent, AfterCaptureEvent, BeforeCaptureEvent
+                    BeforeGetMoveOptionsEvent, AfterCapturedEvent, BeforeCapturedEvent
 from .player import Player
 from .position import Position
 from .rule import Rule, as_rule

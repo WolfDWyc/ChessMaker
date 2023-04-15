@@ -31,7 +31,7 @@ class Square(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRem
     def __init__(self, piece: Piece | None = None):
         super().__init__()
         self._piece = piece
-        self.board: Board = None
+        self._board: Board = None
 
     @property
     def piece(self) -> Piece:
@@ -40,6 +40,12 @@ class Square(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRem
     @property
     def position(self):
         return self.board._get_square_position(self)
+
+    @property
+    def board(self):
+        if self._board is None:
+            raise Exception("Square is not on the board yet")
+        return self._board
 
     @piece.setter
     def piece(self, piece: Piece):

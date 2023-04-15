@@ -24,20 +24,18 @@ class ForcedEnPassant(Rule):
             self.can_en_passant[player] = False
             for piece in event.board.get_player_pieces(player):
                 if isinstance(piece, Pawn):
-                    move_options = piece._get_move_options()
+                    move_options = piece.get_move_options()
                     if any(move_option.extra.get("en_passant") for move_option in move_options):
                         self.can_en_passant[player] = True
                         break
 
     def on_before_get_move_options(self, event: BeforeGetMoveOptionsEvent):
-        event_move_options = event.move_options
-        if not self.can_en_passant[event.piece.player]:
-            return
-        move_options = []
-        for move_option in event_move_options:
-            if move_option.extra.get("en_passant"):
-                move_options.append(move_option)
-        event.set_move_options(move_options)
+        if self.can_en_passant[event.piece.player]:
+            move_options = []
+            for move_option in event.move_options:
+                if move_option.extra.get("en_passant"):
+                    move_options.append(move_option)
+            event.set_move_options(move_options)
 
     def clone(self):
         return ForcedEnPassant(can_en_passant=self.can_en_passant.copy())

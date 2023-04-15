@@ -76,7 +76,7 @@ class Board(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRemo
                 if square is not None:
                     # TODO: Subscribe to new squares
                     self.propagate_all(square)
-                    square.board = self
+                    square._board = self
                     if square.piece is not None:
                         self._on_after_add_piece(AfterAddPieceEvent(square, square.piece))
 
@@ -92,6 +92,7 @@ class Board(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRemo
         piece: Piece = event.piece
         if piece._board is None:
             piece._board = self
+            piece.on_join_board()
             self.publish(AfterNewPieceEvent(piece))
             self.propagate_all(piece)
 

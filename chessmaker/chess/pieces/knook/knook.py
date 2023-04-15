@@ -4,7 +4,7 @@ from typing import Iterable
 from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.piece import Piece
 from chessmaker.chess.pieces import knight
-from chessmaker.chess.pieces.piece_utils import filter_uncapturable_positions, is_in_board, \
+from chessmaker.chess.piece_utils import filter_uncapturable_positions, is_in_board, \
     get_straight_until_blocked, positions_to_move_options
 
 

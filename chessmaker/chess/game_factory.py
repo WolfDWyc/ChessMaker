@@ -2,6 +2,7 @@ import random
 from itertools import cycle
 from typing import Callable
 
+from chessmaker.chess import results
 from chessmaker.chess.base.board import Board
 from chessmaker.chess.base.game import Game
 from chessmaker.chess.base.piece import Piece
@@ -15,11 +16,14 @@ from chessmaker.chess.pieces.knook.knookable_rook import KnookableRook
 from chessmaker.chess.pieces.pawn import Pawn
 from chessmaker.chess.pieces.queen import Queen
 from chessmaker.chess.pieces.rook import Rook
-from chessmaker.chess.results.simple_result import GetSimpleResult
-from chessmaker.chess.rules import ForcedEnPassant, KnightBoosting, OmnipotentF6Pawn, SiberianSwipe, IlVaticano, BetaDecay
+from chessmaker.chess.results import stalemate, Repetition, NoCapturesOrPawnMoves, checkmate
+from chessmaker.chess.rules import ForcedEnPassant, KnightBoosting, OmnipotentF6Pawn, SiberianSwipe, IlVaticano, \
+    BetaDecay, KingCantMoveToC2, LaBastarda
+
 
 class A:
     pass
+
 
 def create_game(
         chess960: bool = False,
@@ -30,29 +34,44 @@ def create_game(
         siberian_swipe: bool = False,
         il_vaticano: bool = False,
         beta_decay: bool = False,
+        la_bastarda: bool = False,
+        king_cant_move_to_c2: bool = False,
+        vertical_castling: bool = False,
+        double_check_to_win: bool = False,
+        capture_all_pieces_to_win: bool = False,
 ):
     _knight = Knight
     _rook = Rook
+    castling_directions = ((1, 0), (-1, 0))
+    if vertical_castling:
+        castling_directions = tuple(list(castling_directions) + [(0, 1), (0, -1)])
+    _king = lambda player: King(player, attackable=capture_all_pieces_to_win, castling_directions=castling_directions)
     if knooks:
         _knight = KnookableKnight
         _rook = KnookableRook
-
-    def _empty_line(length: int) -> list[Square]:
-        return [Square() for _ in range(length)]
-
-    def _up_pawn(player: Player):
-        return Square(Pawn(player, Pawn.Direction.UP, promotions=[Bishop, _rook, Queen, _knight]))
-
-    def _down_pawn(player: Player):
-        return Square(Pawn(player, Pawn.Direction.DOWN, promotions=[Bishop, _rook, Queen, _knight]))
 
     white = Player("white")
     black = Player("black")
     turn_iterator = cycle([white, black])
 
+    def _empty_line(length: int) -> list[Square]:
+        return [Square() for _ in range(length)]
+
+    def _up_pawn(player: Player):
+        return Pawn(player, Pawn.Direction.UP, promotions=[Bishop, _rook, Queen, _knight])
+
+    def _down_pawn(player: Player):
+        return Pawn(player, Pawn.Direction.DOWN, promotions=[Bishop, _rook, Queen, _knight])
+
+    def _pawn(player: Player):
+        if player == white:
+            return _up_pawn(player)
+        elif player == black:
+            return _down_pawn(player)
+
     def _piece_row() -> list[Callable[[Player], Piece]]:
 
-        pieces = [_rook, _knight, Bishop, Queen, King, Bishop, _knight, _rook]
+        pieces = [_rook, _knight, Bishop, Queen, _king, Bishop, _knight, _rook]
 
         if chess960:
             row = [None] * len(pieces)
@@ -65,7 +84,7 @@ def create_game(
                     matched = False
                     continue
 
-                king = row.index(King)
+                king = row.index(_king)
                 first_rook, second_rook = [i for i, piece in enumerate(row) if piece == _rook]
 
                 if king < first_rook < second_rook or king > first_rook > second_rook:
@@ -84,34 +103,46 @@ def create_game(
         (knight_boosting, KnightBoosting()),
         (siberian_swipe, SiberianSwipe()),
         (il_vaticano, IlVaticano()),
-        (omnipotent_f6_pawn, OmnipotentF6Pawn({white: lambda: _up_pawn(white).piece, black: lambda: _down_pawn(black).piece})),
-        (beta_decay, BetaDecay([_rook, Bishop,
-            lambda player: _up_pawn(player).piece if player == white else _down_pawn(player).piece,
-        ])),
+        (king_cant_move_to_c2, KingCantMoveToC2()),
+        (omnipotent_f6_pawn, OmnipotentF6Pawn(pawn=_pawn)),
+        (la_bastarda, LaBastarda(pawn=_pawn)),
+        (beta_decay, BetaDecay([_rook, Bishop, _pawn])),
     ]:
         if enabled:
             rules.append(rule)
 
-    board = Board(
-        squares=[
-            [Square(piece_row[i](black)) for i in range(8)],
-            [_down_pawn(black) for _ in range(8)],
-            _empty_line(8),
-            _empty_line(8),
-            _empty_line(8),
-            _empty_line(8),
-            [_up_pawn(white) for _ in range(8)],
-            [Square(piece_row[i](white)) for i in range(8)],
-        ],
-        players=[white, black],
-        turn_iterator=turn_iterator,
-        rules=rules,
-    )
+    result_functions = [stalemate, Repetition(3), NoCapturesOrPawnMoves(50)]
+    if capture_all_pieces_to_win:
+        result_functions.insert(0, results.capture_all_pieces_to_win)
+    else:
+        result_functions.insert(0, checkmate)
+
+    if double_check_to_win:
+        result_functions.insert(0, results.double_check_to_win)
+
+    def get_result(board: Board) -> str:
+        for result_function in result_functions:
+            result = result_function(board)
+            if result:
+                return result
 
     game = Game(
-        board=board,
-        get_result=GetSimpleResult(),
+        board=Board(
+            squares=[
+                [Square(piece_row[i](black)) for i in range(8)],
+                [Square(_pawn(black)) for _ in range(8)],
+                _empty_line(8),
+                _empty_line(8),
+                _empty_line(8),
+                _empty_line(8),
+                [Square(_pawn(white)) for _ in range(8)],
+                [Square(piece_row[i](white)) for i in range(8)],
+            ],
+            players=[white, black],
+            turn_iterator=turn_iterator,
+            rules=rules,
+        ),
+        get_result=get_result,
     )
 
     return game
-

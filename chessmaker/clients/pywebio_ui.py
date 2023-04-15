@@ -1,5 +1,7 @@
+import time
 from copy import deepcopy
 from dataclasses import dataclass, field
+from functools import partial
 from itertools import groupby
 from typing import Callable, List, ParamSpec, TypeVar, Optional, Any
 from uuid import uuid4
@@ -37,28 +39,32 @@ div[id$="-move-option"] button {color: #bdc6c8; display: inline-flex; align-item
  white-space: nowrap;}
 """
 
+PIECE_URL_TEMPLATE = "https://www.chess.com/chess-themes/pieces/neo/150/{piece_color}{piece_type}.png"
+PIECE_TYPES = {"Pawn": "p", "Rook": "r", "Knight": "n", "Bishop": "b", "Queen": "q", "King": "k"}
 
+PIECE_URLS: dict[str, tuple[str, ...]] = {}
+for piece, piece_type in PIECE_TYPES.items():
+    PIECE_URLS[piece] = (
+        PIECE_URL_TEMPLATE.format(piece_color="w", piece_type=piece_type),
+        PIECE_URL_TEMPLATE.format(piece_color="b", piece_type=piece_type),
+    )
+    
 @dataclass
 class MultiplayerGame:
     game: Game
     options: list[str]
     sessions: List[ThreadBasedSession] = field(default_factory=list)
     colors: dict[str, str] = field(default_factory=dict)
+    piece_urls: dict[str, tuple[str, ...]] = field(default_factory=lambda: PIECE_URLS)
 
 
+public_games: dict[str, tuple[float, MultiplayerGame]] = {}
 multiplayer_games: dict[str, MultiplayerGame] = {}
 
-piece_types = {
-    "Pawn": "p",
-    "Rook": "r",
-    "Knight": "n",
-    "Bishop": "b",
-    "Queen": "q",
-    "King": "k"
-}
 
 PS = ParamSpec("PS")
 RT = TypeVar("RT")
+
 
 def for_all_game_sessions(func: Callable[PS, RT]) -> Callable[PS, RT]:
     game_id = session_data.game_id
@@ -90,23 +96,23 @@ def clear_move_options():
 
 
 def get_piece_url(piece: Piece):
-    piece_color = multiplayer_games[session_data.game_id].colors[piece.player.name]
-    if piece.name == "Knook":
-        if piece_color == "w":
-            return "https://i.imgur.com/UiWcdEb.png"
-        else:
-            return "https://i.imgur.com/g7xTVts.png"
+    multiplayer_game = multiplayer_games[session_data.game_id]
+    player_index = list(multiplayer_game.colors.keys()).index(piece.player.name)
+    return multiplayer_game.piece_urls[piece.name][player_index]
 
-    piece_type = piece_types[piece.name]
 
-    return f"https://www.chess.com/chess-themes/pieces/neo/150/{piece_color}{piece_type}.png"
+def move_piece(piece: Piece, move_option: MoveOption):
+    if session_data.clicked_position is None:
+        return
+    session_data.clicked_position = None
+    piece.move(move_option)
 
 
 def show_multiple_move_options(piece: Piece, move_options: List[MoveOption]):
     with popup("Choose an option"):
         for move_option in move_options:
             def on_click(_move_option=deepcopy(move_option)):
-                piece.move(_move_option)
+                move_piece(piece, _move_option)
                 close_popup()
 
             if move_option.extra:
@@ -136,7 +142,7 @@ def show_move_options(position: Position):
                 text = ""
                 if len(position_move_options) == 1:
                     move_option = position_move_options[0]
-                    on_click = lambda _move_option=move_option: piece.move(_move_option)
+                    on_click = lambda _move_option=move_option: move_piece(piece, _move_option)
                     if move_option.extra:
                         text = list(move_option.extra.keys())[0].capitalize().replace("_", " ")
                 else:
@@ -284,73 +290,106 @@ def join_game(game_id: str):
     session_data.game_id = game_id
     session_data.own_game = False
 
+    put_markdown("""# ChessMaker \n """).style("text-align:center")
+    put_text("Invite URL: " + eval_js("window.location.href.split('?')[0]") + "?game_id=" + session_data.game_id)
     initialize_board()
+    put_markdown("[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style("text-align:center")
 
-def new_game(game_factory: Callable[..., Game], options: list[str], mode: str):
+
+def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, piece_urls: dict[str, tuple[str, ...]]):
     game: Game = game_factory(**{option: True for option in options})
     game_id = str(uuid4())
 
     session_data.game = game
     session_data.game_id = game_id
 
-    multiplayer_game = MultiplayerGame(game, options, [ThreadBasedSession.get_current_session()])
+    multiplayer_game = MultiplayerGame(game, options, [ThreadBasedSession.get_current_session()], {}, piece_urls)
     colors = ['w', 'b']
     for player in game.board.players:
         multiplayer_game.colors[player.name] = colors.pop(0)
 
     multiplayer_games[game_id] = multiplayer_game
+    if mode == 'Multiplayer (Public)':
+        public_games[game_id] = (time.time(), multiplayer_game)
 
     session_data.own_game = True
-    if mode == 'Multiplayer':
+    if mode != 'Singleplayer':
         session_data.player = game.board.current_player
     else:
         session_data.player = ""
 
-    # game.board.subscribe(AfterAddPieceEvent, for_all_game_sessions(on_after_change_piece))
-    # game.board.subscribe(AfterRemovePieceEvent, for_all_game_sessions(on_after_change_piece))
     game.board.subscribe(AfterMoveEvent, for_all_game_sessions(on_after_move))
     game.board.subscribe(AfterTurnChangeEvent, for_all_game_sessions(on_after_turn_change))
     game.subscribe(AfterGameEndEvent, for_all_game_sessions(on_game_end))
 
-    put_markdown("# Chess \n").style("text-align:center")
-    if mode == 'Multiplayer':
+    put_markdown("""# ChessMaker \n """).style("text-align:center")
+    if mode == 'Multiplayer (Private)':
         put_text("Invite URL: " + eval_js("window.location.href.split('?')[0]") + "?game_id=" + session_data.game_id)
     initialize_board()
+    put_markdown("[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style("text-align:center")
 
 
 def start_pywebio_chess_server(
         game_factory: Callable[..., Game],
         supported_options: List[str] = None,
+        piece_urls: dict[str, tuple[str, ...]] = PIECE_URLS,
         remote_access: bool = False,
-        port: int = 8080,
+        port: int = 8000,
         debug: bool = False,
 ):
     if supported_options is None:
         supported_options = []
 
-    @config(title="Chess", css_style=CSS)
+    @config(
+        title="ChessMaker",
+        description="An easily extendible chess implementation designed to support any custom rule or feature.",
+        css_style=CSS
+    )
     def main():
+        games_to_remove = []
+        for game_id, (time_created, game) in public_games.items():
+            if time.time() - time_created > 5 * 60:
+                games_to_remove.append(game_id)
+        for game_id in games_to_remove:
+            public_games.pop(game_id)
+
         if get_query("game_id"):
             if get_query("game_id") not in multiplayer_games:
                 popup("Error", put_error("Game not found"))
             else:
                 join_game(get_query("game_id"))
             return
+
         form_result = input_group('New Game', [
-            radio('Mode', ['Singleplayer', 'Multiplayer'], name='mode', value='Multiplayer'),
+            radio('Mode', ['Singleplayer', 'Multiplayer (Private)', 'Multiplayer (Public)'], name='mode', value='Singleplayer'),
             checkbox('Options',
                      options=supported_options,
                      name='options'),
+            actions('Public Games', [
+                {'label': f"Join game: {', '.join(public_game.options) or 'standard'}", 'value': game_id}
+                for game_id, (_, public_game) in public_games.items()
+                ], name='public_games'),
             actions('-', [
                 {'label': 'Create ', 'value': 'create'},
             ], name='action'),
         ])
 
-        new_game(game_factory, form_result['options'], form_result['mode'])
+        if form_result['public_games'] is not None:
+            public_games.pop(form_result['public_games'])
+            join_game(form_result['public_games'])
+            return
+
+        new_game(game_factory, form_result['options'], form_result['mode'], piece_urls)
 
     start_server(main, port=port, remote_access=remote_access, debug=debug)
 
 
 if __name__ == "__main__":
-    start_pywebio_chess_server(create_game, ["chess960", "knooks", "forced_en_passant", "knight_boosting", "omnipotent_f6_pawn",
-                              "siberian_swipe", "il_vaticano", "beta_decay"], debug=True)
+    start_pywebio_chess_server(
+        create_game,
+        supported_options=["chess960", "knooks", "forced_en_passant", "knight_boosting", "omnipotent_f6_pawn",
+                           "siberian_swipe", "il_vaticano", "beta_decay", "la_bastarda", "king_cant_move_to_c2",
+                           "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win"],
+        debug=True,
+        piece_urls=PIECE_URLS | {"Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"]}
+    )

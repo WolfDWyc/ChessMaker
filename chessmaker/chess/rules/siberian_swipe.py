@@ -4,7 +4,7 @@ from chessmaker.chess.base.board import AfterNewPieceEvent, Board
 from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.piece import Piece, BeforeGetMoveOptionsEvent
 from chessmaker.chess.base.rule import Rule
-from chessmaker.chess.pieces.piece_utils import is_in_board
+from chessmaker.chess.piece_utils import is_in_board
 from chessmaker.chess.pieces.rook import Rook
 from chessmaker.events import EventPriority
 
@@ -25,29 +25,28 @@ class SiberianSwipe(Rule):
 
     def on_before_get_move_options(self, event: BeforeGetMoveOptionsEvent):
         move_options = event.move_options
+        rook: Rook = event.piece
         board = event.piece.board
         player = event.piece.player
         position = event.piece.position
-        for direction in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-            opposite_direction = (-direction[0], -direction[1])
-            if is_in_board(board, position.offset(*opposite_direction)):
-                continue
+        new_move_options = []
 
-            enemy_position = position
-            enemy = None
-            while True:
+        if rook.moved:
+            return
+
+        for direction in [(0, 1), (0, -1)]:
+            enemy_position = position.offset(*direction)
+
+            while is_in_board(board, enemy_position):
+                enemy_piece = board[enemy_position].piece
+
+                if isinstance(enemy_piece, Rook) and enemy_piece.player != player:
+                    move_option = MoveOption(enemy_position, captures={enemy_position}, extra=dict(siberian_swipe=True))
+                    new_move_options.append(move_option)
+
                 enemy_position = enemy_position.offset(*direction)
-                if not is_in_board(board, enemy_position):
-                    break
-                if isinstance(board[enemy_position].piece, Rook) and board[enemy_position].piece.player != player:
-                    enemy = board[enemy_position].piece
-                    break
 
-            if enemy is not None and not is_in_board(board, enemy_position.offset(*direction)):
-                move_option = MoveOption(enemy_position, extra=dict(siberian_swipe=True), captures={enemy_position})
-                move_options = chain(move_options, [move_option])
-
-        event.set_move_options(move_options)
+        event.set_move_options(chain(move_options, new_move_options))
 
     def clone(self):
         return SiberianSwipe()

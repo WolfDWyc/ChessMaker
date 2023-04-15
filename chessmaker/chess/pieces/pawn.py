@@ -6,10 +6,10 @@ from typing import Iterable, Type
 from chessmaker.chess.base.board import AfterNewPieceEvent
 from chessmaker.chess.base.game import AfterTurnChangeEvent
 from chessmaker.chess.base.move_option import MoveOption
-from chessmaker.chess.base.piece import Piece, BeforeMoveEvent, AfterMoveEvent, BeforeCaptureEvent, AfterCaptureEvent
+from chessmaker.chess.base.piece import Piece, BeforeMoveEvent, AfterMoveEvent, BeforeCapturedEvent, AfterCapturedEvent
 from chessmaker.chess.base.player import Player
 from chessmaker.chess.base.position import Position
-from chessmaker.chess.pieces.piece_utils import iterate_until_blocked, is_in_board
+from chessmaker.chess.piece_utils import iterate_until_blocked, is_in_board
 from chessmaker.events import EventPriority, Event
 
 @dataclass(frozen=True)
@@ -48,11 +48,10 @@ class Pawn(Piece):
         self._moved_turns_ago = moved_turns_ago
         self._last_position = last_position
 
-        self.subscribe(AfterNewPieceEvent, self.on_after_added_to_board)
         self.subscribe(BeforeMoveEvent, self._on_before_move, EventPriority.VERY_HIGH)
         self.subscribe(AfterMoveEvent, self._on_after_move, EventPriority.VERY_HIGH)
 
-    def on_after_added_to_board(self):
+    def on_join_board(self):
         self.board.subscribe(AfterTurnChangeEvent, self._on_turn_change)
 
     def _on_turn_change(self, _: AfterTurnChangeEvent):

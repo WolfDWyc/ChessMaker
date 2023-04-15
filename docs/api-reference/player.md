@@ -2,6 +2,8 @@
 
 # chessmaker.chess.base.player
 
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\player.py#L1)
+
 <a id="chessmaker.chess.base.player.Player"></a>
 
 ## Player
@@ -11,11 +13,13 @@
 class Player()
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\base\player.py#L6)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\player.py#L6)
 
 <a id="chessmaker.chess.base.player.Player.name"></a>
 
 #### name: `str`
+
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\player.py#L7)
 
 <a id="chessmaker.chess.base.player.Player.__repr__"></a>
 
@@ -25,5 +29,5 @@ class Player()
 def __repr__()
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/9dc1415fe58befbc9ce03492c419fa5aae04d245/chessmaker\chess\base\player.py#L13)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\player.py#L13)
 

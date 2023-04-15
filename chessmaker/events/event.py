@@ -3,8 +3,8 @@ from dataclasses import dataclass, field
 
 @dataclass(frozen=True)
 class Event:
-    def _set(self, field: str, value: any):
-        object.__setattr__(self, field, value)
+    def _set(self, field_name: str, value: any):
+        object.__setattr__(self, field_name, value)
 
 @dataclass(frozen=True)
 class CancellableEvent(Event):

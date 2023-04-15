@@ -1,6 +1,8 @@
 # Base Game
 
-In this section we'll look at everything a game has to have.
+## Introduction
+
+Now that we've covered the more general concepts, we can start looking at the game itself.
 
 This section contains an overview of each concept, and tries to highlight useful methods,
 but it's not a complete reference - for that, you should look at the API Reference.
@@ -52,7 +54,7 @@ The board also contains a list of players, and a turn iterator.
 The turn iterator is a generator that will be called to get the next player in the turn order.
 When this happens, the board publishes a `BeforeChangeTurnEvent` and `AfterChangeTurnEvent`.
 
-The board propogates all events from the squares and pieces it contains,
+The board propagates all events from the squares and pieces it contains,
 which is very useful for subscribing to all of them at once.
 and also publishes `AfterNewPieceEvent` when a new piece is added to the board.
 
@@ -134,18 +136,18 @@ It also has a `name` class attribute, which is used for display purposes.
 
 The piece also has a `board` attribute, which is set when the piece is added to a board.
 Because the piece is created before it's added to the board, trying to access it when it's created will result in an
-error saying `Piece is not on the board yet`. A common practice on how to do this properly 
-for the piece to subscribe to the `AfterNewPieceEvent` event of itself in its `__init__` method.
+error saying `Piece is not on the board yet`. To perform startup logic, the piece can implement an
+`on_join_board` method, which will be called when the piece is added to the board.
 
 Each piece has to implement a `_get_move_options` method, which returns an iterable of what moves the piece can make.
 Then, when the piece is asked for its move options, it will call the `_get_move_options` method and publish
 `BeforeGetMoveOptionsEvent` and `AfterGetMoveOptionsEvent` events.
 
-Then, a move option is selected by the player, and the piece is asked to make the move using `.move()` - which
-will publish `BeforeMoveEvent`, `AfterMoveEvent`, `BeforeCaptureEvent` and `AfterCaptureEvent` events.
+Then, a move option is selected by the user, and the piece is asked to make the move using `.move()` - which
+will publish `BeforeMoveEvent`, `AfterMoveEvent`, `BeforeCapturedEvent` and `AfterCapturedEvent` events.
 
 For a piece to implement moves that are more complex than just moving and capturing,
-it should subscribe to it's own `BeforeMoveEvent` and `AfterMoveEvent` events, and implement the logic there.
+it should subscribe to its own `BeforeMoveEvent` and `AfterMoveEvent` events, and implement the logic there.
 
 ### Move Option
 A MoveOption is used to describe a move that a piece can make.
@@ -204,7 +206,7 @@ class CoolerPiece(CoolPiece):
             
     def _on_after_move(self, event: AfterMoveEvent):
         if event.move_option.extra.get("turn_into_queen"):
-            # To make this extendable, it's a good practice to send Before and After events for this "promotion".
+            # To make this extendible, it's a good practice to send Before and After events for this "promotion".
             self.board[event.move_option.position].piece = Queen(self.player)
 ```
 
@@ -213,38 +215,49 @@ class CoolerPiece(CoolPiece):
 A rule is a class that can be used to add custom logic to the game.
 It is also an abstract class, and must be extended to be used.
 
-A rule should define startup logic in `on_join_board` - and only startup logic (e.g. subscribing to events).
-The board passed shouldn't be kept in state - instead, callbacks should use the board from the event
+Similarly to pieces, rules also have an `on_join_board` method - only that this one is required to implement,
+and gets the board as an argument. It should contain only startup logic (e.g. subscribing to events), and the
+board passed shouldn't be kept in state - instead, callbacks should use the board from the event
 (This is again related to cloneables, and will be explained in the next section).
 
 An `as_rule` method is provided to turn a function into a rule, which is useful for stateless rules.
 
 ```python
-def my_simple_rule(board: Board):
-    
-    def _on_before_move(event: BeforeMoveEvent):
-        if isinstance(event.piece, Pawn):
-            event.set_cancelled(True)
-            
-    board.subscribe(BeforeMoveEvent, _on_before_move)
-    
-MySimpleRule = as_rule(my_simple_rule)
-    
-class MyComplexRule(Rule):
+def _on_after_move(event: AfterMoveEvent):
+    if isinstance(event.piece, King):
+        event.board.turn_iterator = chain(
+            [event.board.current_player],
+            event.board.turn_iterator,
+        )
+
+def extra_turn_if_moved_king(board: Board):
+    board.subscribe(AfterMoveEvent, _on_after_move, EventPriority.HIGH)
+
+ExtraTurnIfMovedKing = as_rule(extra_turn_if_moved_king)
+
+
+class ExtraTurnIfMovedKingFirst(Rule):
+
     def __init__(self):
-        self.moves = 0
-        
-    def _on_before_move(self, event: BeforeMoveEvent):
-        self.moves += 1
-        if self.moves < 3 and isinstance(event.piece, Pawn):
-            event.set_cancelled(True)
-            
+        self.any_king_moved = False
+
+
+    def _on_after_move(event: AfterMoveEvent):
+        if not self.any_king_moved and isinstance(event.piece, King):
+            event.board.turn_iterator = chain(
+                [event.board.current_player],
+                event.board.turn_iterator,
+            )
+            self.any_king_moved = True
+    
+    
     def on_join_board(self, board: Board):
-        board.subscribe(BeforeMoveEvent, self._on_before_move)
+        board.subscribe(BeforeMoveEvent, self._on_before_move, EventPriority.HIGH)
+
 
 board = Board(
     ...,
-    rules = [MySimpleRule, MyComplexRule],
+    rules=[ExtraTurnIfMovedKing, ExtraTurnIfMovedKingFirst],
 )
 ```
 

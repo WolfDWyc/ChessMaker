@@ -3,9 +3,13 @@
 An easily extendible chess implementation designed
 to support any custom rule or feature.
 
+<span style="font-size:x-large;"><b>
+Play: [https://chessmaker.azurewebsites.net](https://chessmaker.azurewebsites.net)
+</b></span>
+
 **Documentation**: [https://wolfdwyc.github.io/ChessMaker](https://wolfdwyc.github.io/ChessMaker)
 
-**Source Code**: [https://github.com/WolfDWyc/ChessMaker](https://wolfdwyc.github.io/ChessMaker)
+**Source Code**: [https://github.com/WolfDWyc/ChessMaker](https://github.com/WolfDWyc/ChessMaker)
 
 ---
 
@@ -27,7 +31,12 @@ These rules are:
 * Siberian Swipe
 * Il Vaticano
 * Beta Decay
+* La Bastarda
 * Omnipotent F6 Pawn
+* King Cant Move to C2
+* Vertical Castling
+* Double Check to Win
+* Capture All Pieces to Win
 
 ## What ChessMaker isn't
 

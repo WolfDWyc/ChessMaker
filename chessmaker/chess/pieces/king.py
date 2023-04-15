@@ -8,7 +8,7 @@ from chessmaker.chess.base.piece import Piece, PieceEventTypes, BeforeMoveEvent,
 from chessmaker.chess.base.player import Player
 from chessmaker.chess.base.position import Position
 from chessmaker.chess.base.square import Square
-from chessmaker.chess.pieces.piece_utils import filter_uncapturable_positions, is_in_board, iterate_until_blocked, \
+from chessmaker.chess.piece_utils import filter_uncapturable_positions, is_in_board, iterate_until_blocked, \
     positions_to_move_options
 from chessmaker.chess.pieces.rook import Rook
 from chessmaker.events import Event, EventPublisher, EventPriority
@@ -31,12 +31,19 @@ class BeforeCastleEvent(AfterCastleEvent):
         self._set("rook_destination", rook_destination)
 
 class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCastleEvent]):
-    def __init__(self, player: Player, moved: bool = False, attackable: bool = False):
+    def __init__(
+            self,
+            player: Player,
+            moved: bool = False,
+            attackable: bool = False,
+            castling_directions: tuple[tuple[int, int], ...] = ((1, 0), (-1, 0))
+    ):
         super().__init__(player)
         self._moved = moved
         self._attackable = attackable
-        self.subscribe(AfterNewPieceEvent, self.on_after_added_to_board)
+        self._castling_directions = castling_directions
         self.subscribe(BeforeMoveEvent, self._on_before_move, EventPriority.VERY_HIGH)
+
 
 
     @classmethod
@@ -44,9 +51,8 @@ class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCast
     def name(cls):
         return "King"
 
-    def on_after_added_to_board(self, _: AfterNewPieceEvent):
+    def on_join_board(self):
         if not self._attackable:
-            # TODO: What if the piece switches player?
             for piece in self.board.get_pieces():
                 if piece.player == self.player:
                     piece.subscribe(BeforeGetMoveOptionsEvent, self._on_before_get_move_options)
@@ -116,7 +122,7 @@ class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCast
 
         move_options = list(positions_to_move_options(self.board, positions))
 
-        for direction in [(1, 0), (-1, 0)]:
+        for direction in self._castling_directions:
             line = list(iterate_until_blocked(self, direction))
             if len(line) > 2:
                 last_piece = self.board[line[-1]].piece
@@ -134,17 +140,21 @@ class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCast
             destination = self.board[move_option.position]
 
             rook_source = self.board[Position(*move_option.extra["castle"])]
-            rook_destination = self.board[Position((self.position.x + move_option.position.x) // 2, self.position.y)]
+            rook_destination = self.board[Position(
+                (self.position.x + move_option.position.x) // 2,
+                (self.position.y + move_option.position.y) // 2,
+            )]
             rook: Rook = rook_source.piece
 
             before_castle_event = BeforeCastleEvent(self, rook, destination, rook_destination)
             self.publish(before_castle_event)
 
             before_castle_event.king_destination.piece = self
-            rook_source.piece = None
+            self.board[self.position].piece = None
             self._moved = True
 
             before_castle_event.rook_destination.piece = rook
+            rook_source.piece = None
             rook.moved = True
 
             self.publish(AfterCastleEvent(self, rook))
@@ -152,4 +162,4 @@ class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCast
 
     def clone(self):
         # TODO: What if someone else clones the king?
-        return King(self.player, self._moved, attackable=True)
+        return King(self.player, self._moved, attackable=True, castling_directions=self._castling_directions)

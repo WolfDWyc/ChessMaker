@@ -1,6 +1,7 @@
 site_name: ChessMaker
-repo_url: https://github.com/WolfDWyc/ChessMaker.git
+site_url: https://wolfdwyc.github.io/ChessMaker/
 repo_name: WolfDWyc/ChessMaker
+repo_url: https://github.com/WolfDWyc/ChessMaker.git
 nav:
   - ChessMaker: index.md
   - Getting started - Creating a custom game: getting-started.md
@@ -11,7 +12,11 @@ nav:
           - Base Game: guide/concepts/base-game.md
           - Cloneables: guide/concepts/cloneables.md
       - Tutorials:
-          - Siberian Swipe: guide/tutorials/siberian-swipe.md
+          - Capture All Pieces to Win - Changing the result function: guide/tutorials/capture-all-pieces-to-win.md
+          - Siberian Swipe - Adding move options: guide/tutorials/siberian-swipe.md
+          - Forced En Passant - Removing move options: guide/tutorials/forced-en-passant.md
+          - Omnipotent F6 Pawn - Adding custom moves: guide/tutorials/omnipotent-f6-pawn.md
+          - Knook - Adding a new piece: guide/tutorials/knook.md
   - API Reference:
       - Events: api-reference/events.md
       - Piece Utilities: api-reference/piece-utils.md
@@ -23,8 +28,6 @@ nav:
       - Piece: api-reference/piece.md
       - MoveOption: api-reference/move-option.md
       - Rule: api-reference/rule.md
-
-
 theme:
   name: material
   logo: assets/images/simple-logo-cropped-swapped.png
@@ -47,13 +50,13 @@ theme:
       primary: deep purple
       accent: indigo
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
       primary: deep purple
       accent: indigo
       toggle:
-        icon: material/toggle-switch
+        icon: material/brightness-4
         name: Switch to light mode
 markdown_extensions:
   - attr_list

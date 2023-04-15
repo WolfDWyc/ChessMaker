@@ -14,9 +14,13 @@ class AfterMergeToKnookEvent(Event):
     piece: Piece
     knook: Knook
 
+
 class BeforeMergeToKnookEvent(AfterMergeToKnookEvent):
     def set_knook(self, knook: Knook):
         self._set("knook", knook)
+
+
+MergeToKnookEventTypes = AfterMergeToKnookEvent | BeforeMergeToKnookEvent
 
 
 def get_merge_move_options(piece: Piece, positions: Iterable[Position]) -> Iterable[MoveOption]:
@@ -27,14 +31,12 @@ def get_merge_move_options(piece: Piece, positions: Iterable[Position]) -> Itera
             if isinstance(position_piece, Knookable) and not isinstance(position_piece, type(piece)):
                 yield MoveOption(position, extra=dict(knook=True))
 
+
 def on_after_move(event: AfterMoveEvent):
-    if "knook" in event.move_option.extra:
+    if event.move_option.extra.get("knook"):
         piece = event.piece
         before_merge_to_knook_event = BeforeMergeToKnookEvent(piece, Knook(event.piece.player))
         event.piece.publish(before_merge_to_knook_event)
         knook = before_merge_to_knook_event.knook
         piece.board[event.move_option.position].piece = knook
         piece.publish(AfterMergeToKnookEvent(piece, knook))
-
-
-

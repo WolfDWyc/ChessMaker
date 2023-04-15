@@ -3,7 +3,7 @@ from typing import Iterable
 from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.piece import Piece, AfterMoveEvent
 from chessmaker.chess.base.player import Player
-from chessmaker.chess.pieces.piece_utils import filter_uncapturable_positions, get_straight_until_blocked, \
+from chessmaker.chess.piece_utils import filter_uncapturable_positions, get_straight_until_blocked, \
     positions_to_move_options
 from chessmaker.events import EventPriority
 

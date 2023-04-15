@@ -119,7 +119,7 @@ board.unsubscribe_all(on_any_event)
 
 ## Publishing events
 
-If you're adding new code, and want to make that code extendable - it is recommended to publish events.
+If you're adding new code, and want to make that code extendible - it is recommended to publish events.
 For an instance to publish events, it needs to inherit from the `EventPublisher` class.
 
 For typing purposes, it is recommended to specify which event types your publisher publishes

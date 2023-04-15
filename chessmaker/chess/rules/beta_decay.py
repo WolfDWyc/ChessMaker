@@ -6,7 +6,7 @@ from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.piece import Piece, BeforeGetMoveOptionsEvent, BeforeMoveEvent, AfterMoveEvent
 from chessmaker.chess.base.player import Player
 from chessmaker.chess.base.rule import Rule
-from chessmaker.chess.pieces.piece_utils import iterate_until_blocked
+from chessmaker.chess.piece_utils import iterate_until_blocked
 from chessmaker.chess.pieces.queen import Queen
 from chessmaker.events import EventPriority
 

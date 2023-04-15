@@ -2,10 +2,11 @@ from itertools import chain
 
 from chessmaker.chess.base.board import Board, AfterNewPieceEvent
 from chessmaker.chess.base.move_option import MoveOption
-from chessmaker.chess.base.piece import Piece, BeforeGetMoveOptionsEvent, BeforeMoveEvent
+from chessmaker.chess.base.piece import Piece, BeforeGetMoveOptionsEvent, BeforeMoveEvent, AfterMoveEvent, \
+    BeforeCapturedEvent, AfterCapturedEvent
 from chessmaker.chess.base.rule import Rule
 from chessmaker.chess.pieces.bishop import Bishop
-from chessmaker.chess.pieces.piece_utils import is_in_board
+from chessmaker.chess.piece_utils import is_in_board
 from chessmaker.events import EventPriority
 
 SIZE = 3
@@ -71,12 +72,15 @@ class IlVaticano(Rule):
             direction = (sign(other_position.x - position.x), sign(other_position.y - position.y))
             enemy_position = position.offset(*direction)
             while enemy_position != other_position:
+                enemy_piece = board[enemy_position].piece
+                enemy_piece.publish(BeforeCapturedEvent(enemy_piece))
                 board[enemy_position].piece = None
+                enemy_piece.publish(AfterCapturedEvent(enemy_piece))
                 enemy_position = enemy_position.offset(*direction)
 
             board[position].piece = board[other_position].piece
             board[other_position].piece = piece
-            piece.move(MoveOption(other_position))
+            piece.publish(AfterMoveEvent(piece, MoveOption(other_position)))
             event.set_cancelled(True)
     def clone(self):
         return IlVaticano()

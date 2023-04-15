@@ -2,7 +2,7 @@ from typing import Iterable
 
 from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.piece import Piece
-from chessmaker.chess.pieces.piece_utils import get_diagonals_until_blocked, filter_uncapturable_positions, \
+from chessmaker.chess.piece_utils import get_diagonals_until_blocked, filter_uncapturable_positions, \
     positions_to_move_options
 
 

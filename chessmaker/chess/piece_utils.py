@@ -66,6 +66,7 @@ def filter_uncapturable_positions(piece: Piece, positions: Iterable[Position]) -
 
     return filtered_positions
 
+
 def positions_to_move_options(board: Board, positions: Iterable[Position]) -> Iterable[MoveOption]:
     for position in positions:
         if board[position].piece is None:

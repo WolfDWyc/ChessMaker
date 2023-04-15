@@ -24,14 +24,14 @@ renderer:
   - title: Piece Utils
     name: piece-utils
     contents:
-    - chessmaker.chess.pieces.piece_utils.is_in_board
-    - chessmaker.chess.pieces.piece_utils.iterate_until_blocked
-    - chessmaker.chess.pieces.piece_utils.get_diagonals_until_blocked
-    - chessmaker.chess.pieces.piece_utils.get_horizontal_until_blocked
-    - chessmaker.chess.pieces.piece_utils.get_vertical_until_blocked
-    - chessmaker.chess.pieces.piece_utils.get_straight_until_blocked
-    - chessmaker.chess.pieces.piece_utils.filter_uncapturable_positions
-    - chessmaker.chess.pieces.piece_utils.positions_to_move_options
+    - chessmaker.chess.piece_utils.is_in_board
+    - chessmaker.chess.piece_utils.iterate_until_blocked
+    - chessmaker.chess.piece_utils.get_diagonals_until_blocked
+    - chessmaker.chess.piece_utils.get_horizontal_until_blocked
+    - chessmaker.chess.piece_utils.get_vertical_until_blocked
+    - chessmaker.chess.piece_utils.get_straight_until_blocked
+    - chessmaker.chess.piece_utils.filter_uncapturable_positions
+    - chessmaker.chess.piece_utils.positions_to_move_options
   - title: Game
     name: game
     contents:
@@ -72,8 +72,8 @@ renderer:
     - chessmaker.chess.base.piece.BeforeGetMoveOptionsEvent.*
     - chessmaker.chess.base.piece.AfterMoveEvent.*
     - chessmaker.chess.base.piece.BeforeMoveEvent.*
-    - chessmaker.chess.base.piece.AfterCaptureEvent.*
-    - chessmaker.chess.base.piece.BeforeCaptureEvent
+    - chessmaker.chess.base.piece.AfterCapturedEvent.*
+    - chessmaker.chess.base.piece.BeforeCapturedEvent
     - chessmaker.chess.base.piece.PieceEventTypes
   - title: Move Option
     name: move-option
