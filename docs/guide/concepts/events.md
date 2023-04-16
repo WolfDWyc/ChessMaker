@@ -120,16 +120,21 @@ board.unsubscribe_all(on_any_event)
 ## Publishing events
 
 If you're adding new code, and want to make that code extendible - it is recommended to publish events.
-For an instance to publish events, it needs to inherit from the `EventPublisher` class.
+For an instance to publish events, it needs to use the `@event_publisher` decorator,
+and specify the event types it publishes.
 
-For typing purposes, it is recommended to specify which event types your publisher publishes
-using generics and unions.
+If it inherits from another publisher, you need use the same decorator
+to specify the additional event types it publishes,
+If it doesn't publish any additional events, you don't have to use the decorator at all.
+
+For typing and completion purposes, a publisher should also inherit from `EventPublisher`.
+(If it doesn't inherit from another publisher).
 
 ```python
+from chessmaker.events import EventPublisher, event_publisher
 
-from chessmaker.events import EventPublisher
-
-class MyPrinter(EventPublisher[BeforePrintEvent | AfterPrintEvent]):
+@event_publisher(BeforePrintEvent, AfterPrintEvent)
+class MyPrinter(EventPublisher):
     
     def print_number(self):
         number = str(random.randint(0, 100))
@@ -145,8 +150,8 @@ Sometimes, you may want to publish events from a publisher to another one.
 You can do this either to all event types, or to a specific one.
 
 ```python
-
-class MyPrinterManager(EventPublisher[BeforePrintEvent | AfterPrintEvent]):
+@event_publisher(BeforePrintEvent, AfterPrintEvent)
+class MyPrinterManager(EventPublisher):
     
     def __init__(self, my_printer: MyPrinter):
         self.my_printer = my_printer

@@ -2,7 +2,7 @@
 
 # chessmaker.chess.base.game
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\game.py#L1)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\game.py#L1)
 
 <a id="chessmaker.chess.base.game.AfterGameEndEvent"></a>
 
@@ -13,29 +13,30 @@
 class AfterGameEndEvent(Event)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\game.py#L10)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\game.py#L9)
 
 <a id="chessmaker.chess.base.game.AfterGameEndEvent.game"></a>
 
 #### game: `"Game"`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\game.py#L11)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\game.py#L10)
 
 <a id="chessmaker.chess.base.game.AfterGameEndEvent.result"></a>
 
 #### result: `str`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\game.py#L12)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\game.py#L11)
 
 <a id="chessmaker.chess.base.game.Game"></a>
 
 ## Game
 
 ```python
-class Game(EventPublisher[AfterGameEndEvent])
+@event_publisher(AfterGameEndEvent)
+class Game(EventPublisher)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\game.py#L14)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\game.py#L15)
 
 <a id="chessmaker.chess.base.game.Game.__init__"></a>
 
@@ -45,5 +46,5 @@ class Game(EventPublisher[AfterGameEndEvent])
 def __init__(board: Board, get_result: Callable[[Board], str | None])
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/ebfedfed6255bde50e4271e927362d114af5a744/chessmaker\chess\base\game.py#L15)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\game.py#L16)
 

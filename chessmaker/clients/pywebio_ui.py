@@ -22,6 +22,7 @@ from chessmaker.chess.base.player import Player
 from chessmaker.chess.base.position import Position
 from chessmaker.chess.base.square import Square
 from chessmaker.chess.game_factory import create_game
+from chessmaker.events import EventPriority
 
 CSS = """
 .pywebio {padding-top: 0} .markdown-body table {display:table; width:250px; margin:10px auto;}
@@ -282,6 +283,7 @@ def initialize_board():
 
     session_data.last_board_pieces = get_board_strings(board)
 
+
 def join_game(game_id: str):
     multiplayer_games[game_id].sessions.append(ThreadBasedSession.get_current_session())
     game = multiplayer_games[game_id].game
@@ -291,7 +293,6 @@ def join_game(game_id: str):
     session_data.own_game = False
 
     put_markdown("""# ChessMaker \n """).style("text-align:center")
-    put_text("Invite URL: " + eval_js("window.location.href.split('?')[0]") + "?game_id=" + session_data.game_id)
     initialize_board()
     put_markdown("[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style("text-align:center")
 
@@ -318,7 +319,7 @@ def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, p
     else:
         session_data.player = ""
 
-    game.board.subscribe(AfterMoveEvent, for_all_game_sessions(on_after_move))
+    game.board.subscribe(AfterMoveEvent, for_all_game_sessions(on_after_move), EventPriority.LOW)
     game.board.subscribe(AfterTurnChangeEvent, for_all_game_sessions(on_after_turn_change))
     game.subscribe(AfterGameEndEvent, for_all_game_sessions(on_game_end))
 

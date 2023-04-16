@@ -1,9 +1,8 @@
 from dataclasses import dataclass
-from dataclasses import dataclass
 from typing import Callable
 
 from chessmaker.chess.base.board import Board, AfterTurnChangeEvent
-from chessmaker.events import Event, EventPublisher
+from chessmaker.events import Event, event_publisher, EventPublisher
 
 
 @dataclass(frozen=True)
@@ -11,19 +10,20 @@ class AfterGameEndEvent(Event):
     game: "Game"
     result: str
 
-class Game(EventPublisher[AfterGameEndEvent]):
+
+@event_publisher(AfterGameEndEvent)
+class Game(EventPublisher):
     def __init__(
             self,
             board: Board,
             get_result: Callable[[Board], str | None],
-        ):
+    ):
         super().__init__()
         self.board: Board = board
         self._get_result = get_result
         self.result = None
 
         self.board.subscribe(AfterTurnChangeEvent, self._on_after_turn_change)
-
 
     def _on_after_turn_change(self, _: AfterTurnChangeEvent):
         self.result = self._get_result(self.board)

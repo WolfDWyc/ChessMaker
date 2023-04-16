@@ -3,38 +3,42 @@ import warnings
 from dataclasses import dataclass
 from typing import Iterable, Iterator
 
-from chessmaker.chess.base.piece import Piece, PieceEventTypes, AfterMoveEvent
+from chessmaker.cloneable import Cloneable
+from chessmaker.chess.base.piece import Piece, PIECE_EVENT_TYPES, AfterMoveEvent
 from chessmaker.chess.base.player import Player
 from chessmaker.chess.base.position import Position
 from chessmaker.chess.base.rule import Rule
-from chessmaker.chess.base.square import Square, BeforeAddPieceEvent, AfterRemovePieceEvent, AfterAddPieceEvent, \
-    BeforeRemovePieceEvent
-from chessmaker.cloneable import Cloneable
-from chessmaker.events import EventPublisher, Event, CancellableEvent
+from chessmaker.chess.base.square import Square, SQUARE_EVENT_TYPES, AfterAddPieceEvent
+from chessmaker.events import event_publisher, Event, CancellableEvent, EventPublisher, EventPriority
 
 
 @dataclass(frozen=True)
 class AfterNewPieceEvent(Event):
     piece: Piece
 
+
 @dataclass(frozen=True)
 class AfterRemoveSquareEvent(Event):
     position: Position
     square: Square
 
+
 @dataclass(frozen=True)
 class BeforeRemoveSquareEvent(AfterRemoveSquareEvent):
     pass
+
 
 @dataclass(frozen=True)
 class AfterAddSquareEvent(Event):
     position: Position
     square: Square
 
+
 @dataclass(frozen=True)
 class BeforeAddSquareEvent(AfterAddSquareEvent):
     def set_square(self, square: Square):
         self._set("square", square)
+
 
 @dataclass(frozen=True)
 class BeforeTurnChangeEvent(CancellableEvent):
@@ -44,27 +48,30 @@ class BeforeTurnChangeEvent(CancellableEvent):
     def set_next_player(self, next_player: Player):
         self._set("next_player", next_player)
 
+
 @dataclass(frozen=True)
 class AfterTurnChangeEvent(Event):
     board: "Board"
     player: Player
 
-class Board(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRemovePieceEvent | AfterRemovePieceEvent
-                           | PieceEventTypes | AfterNewPieceEvent | BeforeAddSquareEvent | AfterAddSquareEvent
-                           | BeforeRemoveSquareEvent | AfterRemoveSquareEvent | BeforeTurnChangeEvent
-                           | AfterTurnChangeEvent], Cloneable):
+
+@event_publisher(*SQUARE_EVENT_TYPES, *PIECE_EVENT_TYPES, BeforeAddSquareEvent, AfterAddSquareEvent,
+                 BeforeRemoveSquareEvent, AfterRemoveSquareEvent, BeforeTurnChangeEvent, AfterTurnChangeEvent,
+                 AfterNewPieceEvent)
+class Board(Cloneable, EventPublisher):
     def __init__(
             self,
             squares: list[list[Square | None]],
             players: list[Player],
             turn_iterator: Iterator[Player],
             rules: list[Rule] = None
-         ):
+    ):
         super().__init__()
         # Use the max length for each dimension to determine the size of the board
         self.size = (max(len(row) for row in squares), len(squares))
         self._squares = squares
-        self._squares_to_positions = {square: Position(x, y) for y, row in enumerate(squares) for x, square in enumerate(row) if square is not None}
+        self._squares_to_positions = {square: Position(x, y) for y, row in enumerate(squares) for x, square in
+                                      enumerate(row) if square is not None}
         self.players = players
         self.turn_iterator = turn_iterator
         self.current_player = next(self.turn_iterator)
@@ -81,11 +88,10 @@ class Board(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRemo
                         self._on_after_add_piece(AfterAddPieceEvent(square, square.piece))
 
         self.subscribe(AfterAddPieceEvent, self._on_after_add_piece)
-        self.subscribe(AfterMoveEvent, self._on_after_move)
+        self.subscribe(AfterMoveEvent, self._on_after_move, EventPriority.VERY_LOW)
 
         for rule in self.rules:
             rule.on_join_board(self)
-
 
     # TODO: Implement this in a way that detects actual new pieces and not moved pieces
     def _on_after_add_piece(self, event: AfterAddPieceEvent):
@@ -111,7 +117,7 @@ class Board(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRemo
     def __setitem__(self, position: Position, square: Square | None):
         if square == self._squares[position.y][position.x]:
             warnings.warn("Setting a square to the same square doesn't have any effect, did you mean to to change "
-                              "the piece on the square?", RuntimeWarning)
+                          "the piece on the square?", RuntimeWarning)
             return
 
         old_square = self._squares[position.y][position.x]
@@ -169,4 +175,3 @@ class Board(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRemo
             turn_iterators[1],
             [rule.clone() for rule in self.rules]
         )
-

@@ -1,40 +1,48 @@
 import warnings
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
-from chessmaker.chess.base.piece import Piece
 from chessmaker.cloneable import Cloneable
-from chessmaker.events import Event, EventPublisher
+from chessmaker.events import Event, event_publisher, EventPublisher
 
 if TYPE_CHECKING:
+    from chessmaker.chess.base.piece import Piece
     from chessmaker.chess.base.board import Board
+
 
 @dataclass(frozen=True)
 class AfterAddPieceEvent(Event):
     square: "Square"
-    piece: Piece
+    piece: "Piece"
+
 
 class BeforeAddPieceEvent(AfterAddPieceEvent):
-    def set_piece(self, piece: Piece):
+    def set_piece(self, piece: "Piece"):
         self._set("piece", piece)
+
 
 @dataclass(frozen=True)
 class BeforeRemovePieceEvent(Event):
     square: "Square"
-    piece: Piece
+    piece: "Piece"
+
 
 class AfterRemovePieceEvent(BeforeRemovePieceEvent):
     pass
 
 
-class Square(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRemovePieceEvent | AfterRemovePieceEvent], Cloneable):
-    def __init__(self, piece: Piece | None = None):
+SQUARE_EVENT_TYPES = (BeforeAddPieceEvent, AfterAddPieceEvent, BeforeRemovePieceEvent, AfterRemovePieceEvent)
+
+
+@event_publisher(*SQUARE_EVENT_TYPES)
+class Square(Cloneable, EventPublisher):
+    def __init__(self, piece: Optional["Piece"] = None):
         super().__init__()
         self._piece = piece
         self._board: Board = None
 
     @property
-    def piece(self) -> Piece:
+    def piece(self) -> "Piece":
         return self._piece
 
     @property
@@ -48,7 +56,7 @@ class Square(EventPublisher[BeforeAddPieceEvent | AfterAddPieceEvent | BeforeRem
         return self._board
 
     @piece.setter
-    def piece(self, piece: Piece):
+    def piece(self, piece: "Piece"):
         old_piece = self._piece
 
         if piece is old_piece:

@@ -18,6 +18,7 @@ renderer:
     name: events
     contents:
     - chessmaker.events.event_publisher.EventPublisher.*
+    - chessmaker.events.event_publisher.event_publisher
     - chessmaker.events.event.Event
     - chessmaker.events.event.CancellableEvent.*
     - chessmaker.events.event_priority.EventPriority.*
@@ -64,6 +65,7 @@ renderer:
     - chessmaker.chess.base.square.BeforeAddPieceEvent.*
     - chessmaker.chess.base.square.BeforeRemovePieceEvent.*
     - chessmaker.chess.base.square.AfterRemovePieceEvent
+    - chessmaker.chess.base.square.SQUARE_EVENT_TYPES
   - title: Piece
     name: piece
     contents:
@@ -74,7 +76,7 @@ renderer:
     - chessmaker.chess.base.piece.BeforeMoveEvent.*
     - chessmaker.chess.base.piece.AfterCapturedEvent.*
     - chessmaker.chess.base.piece.BeforeCapturedEvent
-    - chessmaker.chess.base.piece.PieceEventTypes
+    - chessmaker.chess.base.piece.PIECE_EVENT_TYPES
   - title: Move Option
     name: move-option
     contents:

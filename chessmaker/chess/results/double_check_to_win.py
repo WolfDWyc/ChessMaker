@@ -15,6 +15,7 @@ def double_check_to_win(board: Board) -> str | None:
                 for move_option in piece.get_move_options():
                     if position in move_option.captures:
                         attacker_count += 1
+                        break
 
         if attacker_count >= 2:
             return f"Double check - {current_player.name} loses"

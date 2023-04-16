@@ -4,20 +4,21 @@ from typing import Iterable
 
 from chessmaker.chess.base.board import AfterNewPieceEvent
 from chessmaker.chess.base.move_option import MoveOption
-from chessmaker.chess.base.piece import Piece, PieceEventTypes, BeforeMoveEvent, BeforeGetMoveOptionsEvent
+from chessmaker.chess.base.piece import Piece, BeforeMoveEvent, BeforeGetMoveOptionsEvent
 from chessmaker.chess.base.player import Player
 from chessmaker.chess.base.position import Position
 from chessmaker.chess.base.square import Square
 from chessmaker.chess.piece_utils import filter_uncapturable_positions, is_in_board, iterate_until_blocked, \
     positions_to_move_options
 from chessmaker.chess.pieces.rook import Rook
-from chessmaker.events import Event, EventPublisher, EventPriority
+from chessmaker.events import Event, event_publisher, EventPriority
 
 
 @dataclass(frozen=True)
 class AfterCastleEvent(Event):
     king: "King"
     rook: Rook
+
 
 @dataclass(frozen=True)
 class BeforeCastleEvent(AfterCastleEvent):
@@ -30,7 +31,9 @@ class BeforeCastleEvent(AfterCastleEvent):
     def set_rook_destination(self, rook_destination: Square):
         self._set("rook_destination", rook_destination)
 
-class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCastleEvent]):
+
+@event_publisher(AfterCastleEvent, BeforeCastleEvent)
+class King(Piece):
     def __init__(
             self,
             player: Player,
@@ -44,14 +47,13 @@ class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCast
         self._castling_directions = castling_directions
         self.subscribe(BeforeMoveEvent, self._on_before_move, EventPriority.VERY_HIGH)
 
-
-
     @classmethod
     @property
     def name(cls):
         return "King"
 
     def on_join_board(self):
+        super().on_join_board()
         if not self._attackable:
             for piece in self.board.get_pieces():
                 if piece.player == self.player:
@@ -73,7 +75,6 @@ class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCast
                 if self.position in move_option.captures:
                     return True
         return False
-
 
     def _is_attacked_after_move(self, piece: Piece, move_option: MoveOption) -> bool:
         board_clone = self.board.clone()
@@ -134,6 +135,7 @@ class King(Piece, EventPublisher[PieceEventTypes | AfterCastleEvent | BeforeCast
                     move_options.append(MoveOption(line[1], extra=dict(castle=line[-1])))
 
         return move_options
+
     def _on_before_move(self, event: BeforeMoveEvent):
         if "castle" in event.move_option.extra:
             move_option = event.move_option

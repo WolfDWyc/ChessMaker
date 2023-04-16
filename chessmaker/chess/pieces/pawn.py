@@ -3,14 +3,13 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Iterable, Type
 
-from chessmaker.chess.base.board import AfterNewPieceEvent
 from chessmaker.chess.base.game import AfterTurnChangeEvent
 from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.piece import Piece, BeforeMoveEvent, AfterMoveEvent, BeforeCapturedEvent, AfterCapturedEvent
 from chessmaker.chess.base.player import Player
 from chessmaker.chess.base.position import Position
 from chessmaker.chess.piece_utils import iterate_until_blocked, is_in_board
-from chessmaker.events import EventPriority, Event
+from chessmaker.events import EventPriority, Event, event_publisher
 
 @dataclass(frozen=True)
 class AfterPromotionEvent(Event):
@@ -22,6 +21,8 @@ class BeforePromotionEvent(AfterPromotionEvent):
     def set_promotion(self, promotion: Piece):
         self._set("promotion", promotion)
 
+
+@event_publisher(BeforePromotionEvent, AfterPromotionEvent)
 class Pawn(Piece):
     class Direction(Enum):
         UP = -1
@@ -52,6 +53,7 @@ class Pawn(Piece):
         self.subscribe(AfterMoveEvent, self._on_after_move, EventPriority.VERY_HIGH)
 
     def on_join_board(self):
+        super().on_join_board()
         self.board.subscribe(AfterTurnChangeEvent, self._on_turn_change)
 
     def _on_turn_change(self, _: AfterTurnChangeEvent):

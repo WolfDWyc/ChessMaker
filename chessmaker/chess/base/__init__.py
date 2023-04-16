@@ -1,7 +1,7 @@
 from .board import Board, BeforeTurnChangeEvent, AfterTurnChangeEvent, AfterNewPieceEvent, BeforeAddSquareEvent, \
                     BeforeRemoveSquareEvent, AfterAddSquareEvent, AfterRemoveSquareEvent
 from .game import Game, AfterGameEndEvent
-from .piece import Piece, PieceEventTypes, AfterMoveEvent, BeforeMoveEvent, AfterGetMoveOptionsEvent, \
+from .piece import Piece, PIECE_EVENT_TYPES, AfterMoveEvent, BeforeMoveEvent, AfterGetMoveOptionsEvent, \
                     BeforeGetMoveOptionsEvent, AfterCapturedEvent, BeforeCapturedEvent
 from .player import Player
 from .position import Position

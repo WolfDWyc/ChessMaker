@@ -2,10 +2,11 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Iterable
 
+from chessmaker.chess.base.square import AfterAddPieceEvent, AfterRemovePieceEvent
 from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.player import Player
 from chessmaker.cloneable import Cloneable
-from chessmaker.events import EventPublisher, Event, CancellableEvent
+from chessmaker.events import event_publisher, Event, CancellableEvent, EventPublisher
 
 if TYPE_CHECKING:
     from chessmaker.chess.base.board import Board
@@ -42,20 +43,24 @@ class BeforeCapturedEvent(AfterCapturedEvent):
     pass
 
 
-PieceEventTypes = AfterGetMoveOptionsEvent | BeforeGetMoveOptionsEvent | AfterMoveEvent | BeforeMoveEvent | \
-                  AfterCapturedEvent | BeforeCapturedEvent
+PIECE_EVENT_TYPES = (BeforeGetMoveOptionsEvent, AfterGetMoveOptionsEvent, BeforeMoveEvent, AfterMoveEvent,
+                     BeforeCapturedEvent, AfterCapturedEvent)
 
 
-class Piece(EventPublisher[PieceEventTypes], Cloneable):
+@event_publisher(*PIECE_EVENT_TYPES)
+class Piece(Cloneable, EventPublisher):
     def __init__(self, player: Player):
         super().__init__()
         self._player = player
         self._board: Board = None
+        self._move_options = None
 
     def __repr__(self):
         return f"{self.__class__.__name__} ({self.player})"
 
     def get_move_options(self) -> Iterable[MoveOption]:
+        if False:
+            return self._move_options
         move_options = self._get_move_options()
 
         before_get_move_options_event = BeforeGetMoveOptionsEvent(self, move_options)
@@ -63,6 +68,7 @@ class Piece(EventPublisher[PieceEventTypes], Cloneable):
         move_options = before_get_move_options_event.move_options
         self.publish(AfterGetMoveOptionsEvent(self, move_options))
 
+        self._move_options = move_options
         return move_options
 
     def move(self, move_option: MoveOption):
@@ -89,7 +95,11 @@ class Piece(EventPublisher[PieceEventTypes], Cloneable):
         self.publish(AfterMoveEvent(self, move_option))
 
     def on_join_board(self):
-        pass
+        self.board.subscribe(AfterAddPieceEvent, self._on_after_change_piece)
+        self.board.subscribe(AfterRemovePieceEvent, self._on_after_change_piece)
+
+    def _on_after_change_piece(self, _: Event):
+        self._move_options = None
 
     @property
     def player(self):
