@@ -366,9 +366,12 @@ def start_pywebio_chess_server(
         form_result = input_group('New Game', [
             radio('Mode', ['Singleplayer', 'Multiplayer (Private)', 'Multiplayer (Public)'], name='mode',
                   value='Singleplayer'),
-            checkbox('Options',
-                     options=supported_options,
-                     name='options'),
+            checkbox(
+                'Options',
+                options=supported_options,
+                name='options',
+                help_text=f"See details at https://wolfdwyc.github.io/ChessMaker/packaged-variants/"
+            ),
             actions('Public Games', [
                 {'label': f"Join game: {', '.join(public_game.options) or 'standard'}", 'value': game_id}
                 for game_id, (_, public_game) in public_games.items()
@@ -394,6 +397,5 @@ if __name__ == "__main__":
         supported_options=["chess960", "knooks", "forced_en_passant", "knight_boosting", "omnipotent_f6_pawn",
                            "siberian_swipe", "il_vaticano", "beta_decay", "la_bastarda", "king_cant_move_to_c2",
                            "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win"],
-        debug=True,
         piece_urls=PIECE_URLS | {"Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"]}
     )

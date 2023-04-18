@@ -24,7 +24,7 @@ class ForcedEnPassant(Rule):
             self.can_en_passant[player] = False
             for piece in event.board.get_player_pieces(player):
                 if isinstance(piece, Pawn):
-                    move_options = piece.get_move_options()
+                    move_options = piece._get_move_options()
                     if any(move_option.extra.get("en_passant") for move_option in move_options):
                         self.can_en_passant[player] = True
                         break

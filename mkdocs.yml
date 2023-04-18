@@ -4,6 +4,7 @@ repo_name: WolfDWyc/ChessMaker
 repo_url: https://github.com/WolfDWyc/ChessMaker.git
 nav:
   - ChessMaker: index.md
+  - Packaged Variants: packaged-variants.md
   - Getting started - Creating a custom game: getting-started.md
   - Creating new variants:
       - First steps: guide/first-steps.md
@@ -73,3 +74,4 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - tables
