@@ -1,9 +1,8 @@
 import time
 from copy import deepcopy
 from dataclasses import dataclass, field
-from functools import partial
 from itertools import groupby
-from typing import Callable, List, ParamSpec, TypeVar, Optional, Any
+from typing import Callable, List, ParamSpec, TypeVar, Optional
 from uuid import uuid4
 
 from pywebio import start_server, config
@@ -49,7 +48,8 @@ for piece, piece_type in PIECE_TYPES.items():
         PIECE_URL_TEMPLATE.format(piece_color="w", piece_type=piece_type),
         PIECE_URL_TEMPLATE.format(piece_color="b", piece_type=piece_type),
     )
-    
+
+
 @dataclass
 class MultiplayerGame:
     game: Game
@@ -61,7 +61,6 @@ class MultiplayerGame:
 
 public_games: dict[str, tuple[float, MultiplayerGame]] = {}
 multiplayer_games: dict[str, MultiplayerGame] = {}
-
 
 PS = ParamSpec("PS")
 RT = TypeVar("RT")
@@ -153,7 +152,6 @@ def show_move_options(position: Position):
 
                 content = put_button(text, color="transparent", onclick=on_click)
 
-
                 move_option_position_piece = board[move_option_position].piece
                 if move_option_position_piece is not None:
                     content.style(f"background-image: url({get_piece_url(move_option_position_piece)});")
@@ -161,7 +159,7 @@ def show_move_options(position: Position):
                 content.style("width:80px")
                 content.style("height:80px")
                 content.style("background-size: 100%;")
-                content.style("background-color: #3c93f2") # #4bb543
+                content.style("background-color: #3c93f2")  # #4bb543
                 content.style("box-sizing: content-box")
                 content.style("border: 0.5px solid #aaaaaa")
 
@@ -191,7 +189,6 @@ def on_piece_click(position: Position):
 
 @use_scope("board")
 def square_content(square: Square):
-
     content = put_text(" ")
     content.style("white-space: nowrap;")
     if square is None:
@@ -207,6 +204,7 @@ def square_content(square: Square):
             content.style("background-size: 100%;")
 
     return content
+
 
 def get_board_strings(board: Board) -> dict[Position, Optional[str]]:
     board_strings = {}
@@ -294,7 +292,9 @@ def join_game(game_id: str):
 
     put_markdown("""# ChessMaker \n """).style("text-align:center")
     initialize_board()
-    put_markdown("[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style("text-align:center")
+    put_markdown(
+        "[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style(
+        "text-align:center")
 
 
 def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, piece_urls: dict[str, tuple[str, ...]]):
@@ -319,7 +319,7 @@ def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, p
     else:
         session_data.player = ""
 
-    game.board.subscribe(AfterMoveEvent, for_all_game_sessions(on_after_move), EventPriority.LOW)
+    game.board.subscribe(AfterMoveEvent, for_all_game_sessions(on_after_move), EventPriority.VERY_LOW + 1)
     game.board.subscribe(AfterTurnChangeEvent, for_all_game_sessions(on_after_turn_change))
     game.subscribe(AfterGameEndEvent, for_all_game_sessions(on_game_end))
 
@@ -327,7 +327,9 @@ def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, p
     if mode == 'Multiplayer (Private)':
         put_text("Invite URL: " + eval_js("window.location.href.split('?')[0]") + "?game_id=" + session_data.game_id)
     initialize_board()
-    put_markdown("[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style("text-align:center")
+    put_markdown(
+        "[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style(
+        "text-align:center")
 
 
 def start_pywebio_chess_server(
@@ -362,14 +364,15 @@ def start_pywebio_chess_server(
             return
 
         form_result = input_group('New Game', [
-            radio('Mode', ['Singleplayer', 'Multiplayer (Private)', 'Multiplayer (Public)'], name='mode', value='Singleplayer'),
+            radio('Mode', ['Singleplayer', 'Multiplayer (Private)', 'Multiplayer (Public)'], name='mode',
+                  value='Singleplayer'),
             checkbox('Options',
                      options=supported_options,
                      name='options'),
             actions('Public Games', [
                 {'label': f"Join game: {', '.join(public_game.options) or 'standard'}", 'value': game_id}
                 for game_id, (_, public_game) in public_games.items()
-                ], name='public_games'),
+            ], name='public_games'),
             actions('-', [
                 {'label': 'Create ', 'value': 'create'},
             ], name='action'),

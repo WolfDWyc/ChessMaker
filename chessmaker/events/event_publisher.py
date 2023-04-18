@@ -52,6 +52,8 @@ class EventPublisher:
         For all events publisher publishes of type event_type, publish them to self
         """
         self._propagating_to[event_type].append(publisher)
+        for subscriber in self._subscribers[event_type]:
+            publisher.subscribe(event_type, subscriber.callback, subscriber.priority)
 
     def propagate_all(self, publisher: 'EventPublisher'):
         """

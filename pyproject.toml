@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chessmaker"
-version = "0.3.0"
+version = "0.3.1"
 description = "An easily extendible chess implementation designed to support any custom rule or feature"
 readme = "README.md"
 authors = ["WolfDWyc <yoavwolfdw@gmail.com>",]

@@ -2,7 +2,6 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Iterable
 
-from chessmaker.chess.base.square import AfterAddPieceEvent, AfterRemovePieceEvent
 from chessmaker.chess.base.move_option import MoveOption
 from chessmaker.chess.base.player import Player
 from chessmaker.cloneable import Cloneable
@@ -53,14 +52,11 @@ class Piece(Cloneable, EventPublisher):
         super().__init__()
         self._player = player
         self._board: Board = None
-        self._move_options = None
 
     def __repr__(self):
         return f"{self.__class__.__name__} ({self.player})"
 
     def get_move_options(self) -> Iterable[MoveOption]:
-        if False:
-            return self._move_options
         move_options = self._get_move_options()
 
         before_get_move_options_event = BeforeGetMoveOptionsEvent(self, move_options)
@@ -68,7 +64,6 @@ class Piece(Cloneable, EventPublisher):
         move_options = before_get_move_options_event.move_options
         self.publish(AfterGetMoveOptionsEvent(self, move_options))
 
-        self._move_options = move_options
         return move_options
 
     def move(self, move_option: MoveOption):
@@ -95,11 +90,7 @@ class Piece(Cloneable, EventPublisher):
         self.publish(AfterMoveEvent(self, move_option))
 
     def on_join_board(self):
-        self.board.subscribe(AfterAddPieceEvent, self._on_after_change_piece)
-        self.board.subscribe(AfterRemovePieceEvent, self._on_after_change_piece)
-
-    def _on_after_change_piece(self, _: Event):
-        self._move_options = None
+        pass
 
     @property
     def player(self):
