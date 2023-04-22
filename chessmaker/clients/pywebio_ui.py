@@ -32,7 +32,7 @@ CSS = """
 td>div {width:80px; height:80px}.btn-light {background-color:#d3d6da;}
 @media (max-width: 435px) {.btn{padding:0.375rem 0.5rem;}}
 @media (max-width: 355px) {.btn{padding:0.375rem 0.4rem;}}
-div[id='pywebio-scope-board'] .btn {width: 80px; height: 80px;}
+div[id="pywebio-scope-board"] .btn {width: 80px; height: 80px;}
 .pywebio {min-height:calc(100vh - 50px);}
 div[id$="-move-option"] button {color: #bdc6c8; display: inline-flex; align-item: flex-start;
  vertical-align: top; padding: 0px; line-height: 0.75; font-style: italic; font-size: 11px;
@@ -320,7 +320,7 @@ def join_game(game_id: str):
     session_data.own_game = False
 
     put_markdown("""# ChessMaker \n """).style("text-align:center")
-    put_button("Share Position", onclick=share_position)
+    put_button("Copy position URL", onclick=share_position)
     initialize_board()
     put_markdown(
         "[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style(
@@ -335,16 +335,16 @@ def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, p
     session_data.game_id = game_id
 
     client_game = ClientGame(game, options, [ThreadBasedSession.get_current_session()], {}, piece_urls)
-    colors = ['w', 'b']
+    colors = ["w", "b"]
     for player in game.board.players:
         client_game.colors[player.name] = colors.pop(0)
 
     client_games[game_id] = client_game
-    if mode == 'Multiplayer (Public)':
+    if mode == "Multiplayer (Public)":
         public_games[game_id] = (time.time(), client_game)
 
     session_data.own_game = True
-    if mode != 'Singleplayer':
+    if mode != "Singleplayer":
         session_data.player = game.board.current_player
     else:
         session_data.player = ""
@@ -354,10 +354,9 @@ def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, p
     game.subscribe(AfterGameEndEvent, for_all_game_sessions(on_game_end))
 
     put_markdown("""# ChessMaker \n """).style("text-align:center")
-    buttons = [put_button("Share Position", onclick=share_position)]
-    if mode == 'Multiplayer (Private)':
+    buttons = [put_button("Copy position URL", onclick=share_position)]
+    if mode == "Multiplayer (Private)":
         buttons.append(put_button("Copy invite URL", onclick=invite))
-    # Put buttons on the same line
     put_scope("buttons", content=buttons).style("display: flex; justify-content: start; gap: 5px")
 
     initialize_board()
@@ -403,36 +402,42 @@ def start_pywebio_chess_server(
             if get_query("position_id") not in shared_positions:
                 popup("Error", put_error("Position not found"))
             else:
+                form_result = input_group("New Game", [
+                    radio("Mode", ["Singleplayer", "Multiplayer (Private)", "Multiplayer (Public)"], name="mode",
+                          value="Singleplayer"),
+                    actions("-", [
+                        {"label": "Create", "value": "create"},
+                    ], name="action"),
+                ])
                 shared_position = shared_positions[get_query("position_id")]
                 new_game(lambda **_: Game(shared_position.board, shared_position.get_result),
-                            shared_position.options, 'Singleplayer', piece_urls)
+                            shared_position.options, form_result["mode"], piece_urls)
             return
 
-
-        form_result = input_group('New Game', [
-            radio('Mode', ['Singleplayer', 'Multiplayer (Private)', 'Multiplayer (Public)'], name='mode',
-                  value='Singleplayer'),
+        form_result = input_group("New Game", [
+            radio("Mode", ["Singleplayer", "Multiplayer (Private)", "Multiplayer (Public)"], name="mode",
+                  value="Singleplayer"),
             checkbox(
-                'Options',
+                "Options",
                 options=supported_options,
-                name='options',
+                name="options",
                 help_text=f"See details at https://wolfdwyc.github.io/ChessMaker/packaged-variants/"
             ),
-            actions('Public Games', [
-                {'label': f"Join game: {', '.join(public_game.options) or 'standard'}", 'value': game_id}
+            actions("Public Games", [
+                {"label": f"Join game: {', '.join(public_game.options) or 'standard'}", "value": game_id}
                 for game_id, (_, public_game) in public_games.items()
-            ], name='public_games'),
-            actions('-', [
-                {'label': 'Create ', 'value': 'create'},
-            ], name='action'),
+            ], name="public_games"),
+            actions("-", [
+                {"label": "Create", "value": "create"},
+            ], name="action"),
         ])
 
-        if form_result['public_games'] is not None:
-            public_games.pop(form_result['public_games'])
-            join_game(form_result['public_games'])
+        if form_result["public_games"] is not None:
+            public_games.pop(form_result["public_games"])
+            join_game(form_result["public_games"])
             return
 
-        new_game(game_factory, form_result['options'], form_result['mode'], piece_urls)
+        new_game(game_factory, form_result["options"], form_result["mode"], piece_urls)
 
     start_server(main, port=port, remote_access=remote_access, debug=debug)
 
@@ -444,4 +449,5 @@ if __name__ == "__main__":
                            "siberian_swipe", "il_vaticano", "beta_decay", "la_bastarda", "king_cant_move_to_c2",
                            "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win"],
         piece_urls=PIECE_URLS | {"Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"]}
+        , debug=True
     )
