@@ -67,15 +67,6 @@ from chessmaker.clients import start_pywebio_chess_server
 def _empty_line(length: int) -> list[Square]:
     return [Square() for _ in range(length)]
 
-
-def _up_pawn(player: Player) -> Pawn:
-    return Pawn(player, Pawn.Direction.UP, promotions=[Bishop, Rook, Queen, Knight])
-
-
-def _down_pawn(player: Player) -> Pawn:
-    return Pawn(player, Pawn.Direction.DOWN, promotions=[Bishop, Rook, Queen, Knight])
-
-
 def get_result(board: Board) -> str:
     for result_function in [checkmate, stalemate, Repetition(3), NoCapturesOrPawnMoves(50)]:
         result = result_function(board)
@@ -91,9 +82,9 @@ def create_game(**_) -> Game:
     
     def _pawn(player: Player):
         if player == white:
-            return _up_pawn(player)
+            return Pawn(white, Pawn.Direction.UP, promotions=[Bishop, Rook, Queen, Knight])
         elif player == black:
-            return _down_pawn(player)
+            return Pawn(black, Pawn.Direction.DOWN, promotions=[Bishop, Rook, Queen, Knight])
 
     game = Game(
         board=Board(
@@ -176,13 +167,6 @@ def _empty_line(length: int) -> list[Square]:
     return [Square() for _ in range(length)]
 
 
-def _up_pawn(player: Player) -> Pawn:
-    return Pawn(player, Pawn.Direction.UP, promotions=[Bishop])
-
-
-def _down_pawn(player: Player) -> Pawn:
-    return Pawn(player, Pawn.Direction.DOWN, promotions=[Bishop])
-
 def create_custom_game(*_):
     white = Player("white")
     black = Player("black")
@@ -190,9 +174,9 @@ def create_custom_game(*_):
     
     def _pawn(player: Player):
         if player == white:
-            return _up_pawn(player)
+            return Pawn(white, Pawn.Direction.UP, promotions=[Bishop])
         elif player == black:
-            return _down_pawn(player)
+            return Pawn(black, Pawn.Direction.DOWN, promotions=[Bishop])
 
     game = Game(
         board=Board(

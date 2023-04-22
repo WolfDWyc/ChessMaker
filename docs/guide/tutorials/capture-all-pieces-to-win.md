@@ -58,8 +58,8 @@ To do this, we can add the following to the start of our `capture_all_pieces_to_
 from chessmaker.chess.results import stalemate, Repetition, NoCapturesOrPawnMoves
 
 def capture_all_pieces_to_win(board: Board) -> str | None: 
-    for result in [stalemate, Repetition(), NoCapturesOrPawnMoves()]:
-        result = result(board)
+    for result_function in [stalemate, Repetition(), NoCapturesOrPawnMoves()]:
+        result = result_function(board)
         if result:
             return result
 

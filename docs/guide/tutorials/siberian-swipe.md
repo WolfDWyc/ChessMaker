@@ -113,8 +113,7 @@ passed to us in `on_join_board`.
 3. We check both up and down.
 4. We search for rooks in that direction - ignoring all pieces that might block us,
 and use `piece_utils.is_in_board` to check if we reached the edge of the board (or a hole).
-5. We then continue in a line in that direction, ignoring all pieces that might block us,
-(Because we're "below" the board) until we hit a square that's not in the board.
+5. We want our move to be able to skip over all pieces, so we ignore all pieces that aren't enemy rooks.
 6. If there is, we create a move option that captures it. Notice that 
 we add `extra=dict(siberian_swipe=True)` to the move option. For our use case,
 this is only used for display purposes, but if we wanted to modify how the move works

@@ -2,7 +2,7 @@
 
 # chessmaker.chess.base.board
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L1)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L1)
 
 <a id="chessmaker.chess.base.board.AfterNewPieceEvent"></a>
 
@@ -13,13 +13,13 @@
 class AfterNewPieceEvent(Event)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L16)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L16)
 
 <a id="chessmaker.chess.base.board.AfterNewPieceEvent.piece"></a>
 
 #### piece: `Piece`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L17)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L17)
 
 <a id="chessmaker.chess.base.board.AfterRemoveSquareEvent"></a>
 
@@ -30,19 +30,19 @@ class AfterNewPieceEvent(Event)
 class AfterRemoveSquareEvent(Event)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L21)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L21)
 
 <a id="chessmaker.chess.base.board.AfterRemoveSquareEvent.position"></a>
 
 #### position: `Position`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L22)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L22)
 
 <a id="chessmaker.chess.base.board.AfterRemoveSquareEvent.square"></a>
 
 #### square: `Square`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L23)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L23)
 
 <a id="chessmaker.chess.base.board.BeforeRemoveSquareEvent"></a>
 
@@ -53,7 +53,7 @@ class AfterRemoveSquareEvent(Event)
 class BeforeRemoveSquareEvent(AfterRemoveSquareEvent)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L27)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L27)
 
 <a id="chessmaker.chess.base.board.AfterAddSquareEvent"></a>
 
@@ -64,19 +64,19 @@ class BeforeRemoveSquareEvent(AfterRemoveSquareEvent)
 class AfterAddSquareEvent(Event)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L32)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L32)
 
 <a id="chessmaker.chess.base.board.AfterAddSquareEvent.position"></a>
 
 #### position: `Position`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L33)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L33)
 
 <a id="chessmaker.chess.base.board.AfterAddSquareEvent.square"></a>
 
 #### square: `Square`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L34)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L34)
 
 <a id="chessmaker.chess.base.board.BeforeAddSquareEvent"></a>
 
@@ -87,7 +87,7 @@ class AfterAddSquareEvent(Event)
 class BeforeAddSquareEvent(AfterAddSquareEvent)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L38)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L38)
 
 <a id="chessmaker.chess.base.board.BeforeAddSquareEvent.set_square"></a>
 
@@ -97,7 +97,7 @@ class BeforeAddSquareEvent(AfterAddSquareEvent)
 def set_square(square: Square)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L39)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L39)
 
 <a id="chessmaker.chess.base.board.BeforeTurnChangeEvent"></a>
 
@@ -108,19 +108,19 @@ def set_square(square: Square)
 class BeforeTurnChangeEvent(CancellableEvent)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L44)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L44)
 
 <a id="chessmaker.chess.base.board.BeforeTurnChangeEvent.board"></a>
 
 #### board: `"Board"`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L45)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L45)
 
 <a id="chessmaker.chess.base.board.BeforeTurnChangeEvent.next_player"></a>
 
 #### next\_player: `Player`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L46)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L46)
 
 <a id="chessmaker.chess.base.board.BeforeTurnChangeEvent.set_next_player"></a>
 
@@ -130,7 +130,7 @@ class BeforeTurnChangeEvent(CancellableEvent)
 def set_next_player(next_player: Player)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L48)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L48)
 
 <a id="chessmaker.chess.base.board.AfterTurnChangeEvent"></a>
 
@@ -141,19 +141,19 @@ def set_next_player(next_player: Player)
 class AfterTurnChangeEvent(Event)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L53)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L53)
 
 <a id="chessmaker.chess.base.board.AfterTurnChangeEvent.board"></a>
 
 #### board: `"Board"`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L54)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L54)
 
 <a id="chessmaker.chess.base.board.AfterTurnChangeEvent.player"></a>
 
 #### player: `Player`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L55)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L55)
 
 <a id="chessmaker.chess.base.board.Board"></a>
 
@@ -166,7 +166,7 @@ class AfterTurnChangeEvent(Event)
 class Board(Cloneable,  EventPublisher)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L61)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L61)
 
 <a id="chessmaker.chess.base.board.Board.__init__"></a>
 
@@ -176,7 +176,7 @@ class Board(Cloneable,  EventPublisher)
 def __init__(squares: list[list[Square | None]], players: list[Player], turn_iterator: Iterator[Player], rules: list[Rule] = None)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L62)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L62)
 
 <a id="chessmaker.chess.base.board.Board.__getitem__"></a>
 
@@ -186,7 +186,7 @@ def __init__(squares: list[list[Square | None]], players: list[Player], turn_ite
 def __getitem__(position: Position) -> Square | None
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L114)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L114)
 
 <a id="chessmaker.chess.base.board.Board.__setitem__"></a>
 
@@ -196,7 +196,7 @@ def __getitem__(position: Position) -> Square | None
 def __setitem__(position: Position, square: Square | None)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L117)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L117)
 
 <a id="chessmaker.chess.base.board.Board.__iter__"></a>
 
@@ -206,7 +206,7 @@ def __setitem__(position: Position, square: Square | None)
 def __iter__() -> Iterable[Square]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L140)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L140)
 
 <a id="chessmaker.chess.base.board.Board.get_pieces"></a>
 
@@ -216,7 +216,7 @@ def __iter__() -> Iterable[Square]
 def get_pieces() -> Iterable[Piece]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L159)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L159)
 
 <a id="chessmaker.chess.base.board.Board.get_player_pieces"></a>
 
@@ -226,7 +226,7 @@ def get_pieces() -> Iterable[Piece]
 def get_player_pieces(player: Player) -> Iterable[Piece]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L164)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L164)
 
 <a id="chessmaker.chess.base.board.Board.clone"></a>
 
@@ -236,5 +236,5 @@ def get_player_pieces(player: Player) -> Iterable[Piece]
 def clone()
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/c9884fe15fb48873a51b855d661dad2103a0857d/chessmaker\chess\base\board.py#L169)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/eb72eddc40bfcf661740274ff3857c0e0abd22f6/chessmaker\chess\base\board.py#L169)
 

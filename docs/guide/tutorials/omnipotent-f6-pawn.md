@@ -73,7 +73,7 @@ class OmnipotentF6Pawn(Rule):
    the first index is the row, and the second is the column.
 2. The reason we're not using the `Pawn` class directly is that because it
    accepts more arguments that we don't have - like the pawn's direction
-   and what can it promote to.
+   and what it can promote to.
 
 ## Implementing the Rule
 

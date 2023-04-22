@@ -172,6 +172,6 @@ class Board(Cloneable, EventPublisher):
         return Board(
             [[square.clone() if square is not None else None for square in row] for row in self._squares],
             self.players,
-            turn_iterators[1],
+            itertools.chain([self.current_player], turn_iterators[1]),
             [rule.clone() for rule in self.rules]
         )

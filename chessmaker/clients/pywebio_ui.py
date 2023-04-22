@@ -10,7 +10,7 @@ from pywebio.input import input_group, actions, checkbox, radio
 from pywebio.io_ctrl import Output
 from pywebio.output import put_text, put_table, put_markdown, put_button, use_scope, clear, put_scope, popup, \
     close_popup, toast, put_error
-from pywebio.session import local as session_data, ThreadBasedSession, eval_js
+from pywebio.session import local as session_data, ThreadBasedSession, run_js
 from pywebio_battery import get_query
 
 from chessmaker.chess.base.board import Board
@@ -51,7 +51,7 @@ for piece, piece_type in PIECE_TYPES.items():
 
 
 @dataclass
-class MultiplayerGame:
+class ClientGame:
     game: Game
     options: list[str]
     sessions: List[ThreadBasedSession] = field(default_factory=list)
@@ -59,8 +59,17 @@ class MultiplayerGame:
     piece_urls: dict[str, tuple[str, ...]] = field(default_factory=lambda: PIECE_URLS)
 
 
-public_games: dict[str, tuple[float, MultiplayerGame]] = {}
-multiplayer_games: dict[str, MultiplayerGame] = {}
+@dataclass
+class SharedPosition:
+    board: Board
+    get_result: Callable[[Board], str | None]
+    options: list[str]
+    piece_urls: dict[str, tuple[str, ...]] = field(default_factory=lambda: PIECE_URLS)
+
+
+public_games: dict[str, tuple[float, ClientGame]] = {}
+client_games: dict[str, ClientGame] = {}
+shared_positions: dict[str, SharedPosition] = {}
 
 PS = ParamSpec("PS")
 RT = TypeVar("RT")
@@ -70,7 +79,7 @@ def for_all_game_sessions(func: Callable[PS, RT]) -> Callable[PS, RT]:
     game_id = session_data.game_id
 
     def wrapper(*args, **kwargs):
-        game = multiplayer_games[game_id]
+        game = client_games[game_id]
         for session in game.sessions:
             func_id = str(uuid4())
 
@@ -96,9 +105,9 @@ def clear_move_options():
 
 
 def get_piece_url(piece: Piece):
-    multiplayer_game = multiplayer_games[session_data.game_id]
-    player_index = list(multiplayer_game.colors.keys()).index(piece.player.name)
-    return multiplayer_game.piece_urls[piece.name][player_index]
+    client_game = client_games[session_data.game_id]
+    player_index = list(client_game.colors.keys()).index(piece.player.name)
+    return client_game.piece_urls[piece.name][player_index]
 
 
 def move_piece(piece: Piece, move_option: MoveOption):
@@ -180,7 +189,7 @@ def on_piece_click(position: Position):
     if session_data.player != "":
         if session_data.player != current_player:
             return
-        if len(multiplayer_games[session_data.game_id].sessions) < 2:
+        if len(client_games[session_data.game_id].sessions) < 2:
             toast("Waiting for another player to join...", position="top", duration=3)
             return
 
@@ -245,9 +254,29 @@ def on_game_end(event: AfterGameEndEvent):
     popup("Game Over", event.result)
 
 
+def share_position():
+    board = session_data.game.board.clone()
+    get_result = session_data.game._get_result
+    options = client_games[session_data.game_id].options
+    piece_urls = client_games[session_data.game_id].piece_urls
+
+    position_id = str(uuid4())
+    shared_positions[position_id] = SharedPosition(board, get_result, options, piece_urls)
+
+    run_js("navigator.clipboard.writeText(window.location.href.split('?')[0] + '?position_id=' + position_id);",
+           position_id=position_id)
+    toast("Position URL copied to clipboard")
+
+
+def invite():
+    game_id = session_data.game_id
+    run_js("navigator.clipboard.writeText(window.location.href.split('?')[0] + '?game_id=' + game_id);", game_id=game_id)
+    toast("Invite URL copied to clipboard")
+
+
 def initialize_board():
     board: Board = session_data.game.board
-    options = multiplayer_games[session_data.game_id].options
+    options = client_games[session_data.game_id].options
     if options:
         put_text(f"Options: {', '.join(options)}")
 
@@ -283,14 +312,15 @@ def initialize_board():
 
 
 def join_game(game_id: str):
-    multiplayer_games[game_id].sessions.append(ThreadBasedSession.get_current_session())
-    game = multiplayer_games[game_id].game
+    client_games[game_id].sessions.append(ThreadBasedSession.get_current_session())
+    game = client_games[game_id].game
 
     session_data.game = game
     session_data.game_id = game_id
     session_data.own_game = False
 
     put_markdown("""# ChessMaker \n """).style("text-align:center")
+    put_button("Share Position", onclick=share_position)
     initialize_board()
     put_markdown(
         "[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style(
@@ -304,14 +334,14 @@ def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, p
     session_data.game = game
     session_data.game_id = game_id
 
-    multiplayer_game = MultiplayerGame(game, options, [ThreadBasedSession.get_current_session()], {}, piece_urls)
+    client_game = ClientGame(game, options, [ThreadBasedSession.get_current_session()], {}, piece_urls)
     colors = ['w', 'b']
     for player in game.board.players:
-        multiplayer_game.colors[player.name] = colors.pop(0)
+        client_game.colors[player.name] = colors.pop(0)
 
-    multiplayer_games[game_id] = multiplayer_game
+    client_games[game_id] = client_game
     if mode == 'Multiplayer (Public)':
-        public_games[game_id] = (time.time(), multiplayer_game)
+        public_games[game_id] = (time.time(), client_game)
 
     session_data.own_game = True
     if mode != 'Singleplayer':
@@ -324,12 +354,18 @@ def new_game(game_factory: Callable[..., Game], options: list[str], mode: str, p
     game.subscribe(AfterGameEndEvent, for_all_game_sessions(on_game_end))
 
     put_markdown("""# ChessMaker \n """).style("text-align:center")
+    buttons = [put_button("Share Position", onclick=share_position)]
     if mode == 'Multiplayer (Private)':
-        put_text("Invite URL: " + eval_js("window.location.href.split('?')[0]") + "?game_id=" + session_data.game_id)
+        buttons.append(put_button("Copy invite URL", onclick=invite))
+    # Put buttons on the same line
+    put_scope("buttons", content=buttons).style("display: flex; justify-content: start; gap: 5px")
+
     initialize_board()
     put_markdown(
-        "[Docs](https://wolfdwyc.github.io/ChessMaker) - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style(
-        "text-align:center")
+        "[Docs](https://wolfdwyc.github.io/ChessMaker)"
+        " - [Source](https://github.com/WolfDWyc/ChessMaker)\nMade by WolfDWyc").style(
+        "text-align:center"
+    )
 
 
 def start_pywebio_chess_server(
@@ -357,11 +393,21 @@ def start_pywebio_chess_server(
             public_games.pop(game_id)
 
         if get_query("game_id"):
-            if get_query("game_id") not in multiplayer_games:
+            if get_query("game_id") not in client_games:
                 popup("Error", put_error("Game not found"))
             else:
                 join_game(get_query("game_id"))
             return
+
+        if get_query("position_id"):
+            if get_query("position_id") not in shared_positions:
+                popup("Error", put_error("Position not found"))
+            else:
+                shared_position = shared_positions[get_query("position_id")]
+                new_game(lambda **_: Game(shared_position.board, shared_position.get_result),
+                            shared_position.options, 'Singleplayer', piece_urls)
+            return
+
 
         form_result = input_group('New Game', [
             radio('Mode', ['Singleplayer', 'Multiplayer (Private)', 'Multiplayer (Public)'], name='mode',

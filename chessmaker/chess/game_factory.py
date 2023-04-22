@@ -57,20 +57,13 @@ def create_game(
     def _empty_line(length: int) -> list[Square]:
         return [Square() for _ in range(length)]
 
-    def _up_pawn(player: Player):
-        return Pawn(player, Pawn.Direction.UP, promotions=[Bishop, _rook, Queen, _knight])
-
-    def _down_pawn(player: Player):
-        return Pawn(player, Pawn.Direction.DOWN, promotions=[Bishop, _rook, Queen, _knight])
-
     def _pawn(player: Player):
         if player == white:
-            return _up_pawn(player)
+            return Pawn(white, Pawn.Direction.UP, promotions=[Bishop, _rook, Queen, _knight])
         elif player == black:
-            return _down_pawn(player)
+            return Pawn(black, Pawn.Direction.DOWN, promotions=[Bishop, _rook, Queen, _knight])
 
     def _piece_row() -> list[Callable[[Player], Piece]]:
-
         pieces = [_rook, _knight, Bishop, Queen, _king, Bishop, _knight, _rook]
 
         if chess960:
