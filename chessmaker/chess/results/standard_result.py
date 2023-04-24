@@ -5,8 +5,17 @@ from chessmaker.chess.results.repetition import Repetition
 from chessmaker.chess.results.stalemate import stalemate
 
 
-def standard_result(board: Board):
-    for result in [checkmate, stalemate, Repetition(), NoCapturesOrPawnMoves()]:
-        result = result(board)
-        if result:
-            return result
+class StandardResult:
+    def __init__(self):
+        self.results = [
+            checkmate,
+            stalemate,
+            Repetition(),
+            NoCapturesOrPawnMoves(),
+        ]
+
+    def __call__(self, board: Board):
+        for result in self.results:
+            result = result(board)
+            if result:
+                return result

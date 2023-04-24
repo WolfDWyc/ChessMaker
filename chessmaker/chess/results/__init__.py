@@ -1,4 +1,4 @@
-from .standard_result import standard_result
+from .standard_result import StandardResult
 from .checkmate import checkmate
 from .stalemate import stalemate
 from .repetition import Repetition

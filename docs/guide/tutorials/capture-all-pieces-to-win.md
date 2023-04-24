@@ -52,24 +52,25 @@ And that's it! We can now play a game where the only winning condition is to cap
 Even though we don't want to be able to win by checkmate in this variant,
 we might still want to have stalemate, repetition and other result functions.
 
-To do this, we can add the following to the start of our `capture_all_pieces_to_win` function:
+To do this, we can change our result function to a class, and add in other results:
 
 ```python
 from chessmaker.chess.results import stalemate, Repetition, NoCapturesOrPawnMoves
 
-def capture_all_pieces_to_win(board: Board) -> str | None: 
-    for result_function in [stalemate, Repetition(), NoCapturesOrPawnMoves()]:
-        result = result_function(board)
-        if result:
-            return result
+class CaptureAllPiecesToWin:
+    def __init__(self):
+        self.result_functions = [capture_all_pieces_to_win, stalemate, Repetition(), NoCapturesOrPawnMoves()]
 
-    # ...
+    def __call__(self, board: Board):
+        for result_function in self.result_functions:
+            result = result_function(board)
+            if result:
+                return result
 ```
 
 !!! note
-    For the sake of this tutorial, this is fine. However, if we wanted to make our result function
-    reusable, like the results we used here, it's a better practice to have our logic in one
-    function, and then call all 4 result functions in a loop in a separate function.
+    Results that hold state (like repitition or compuond results like ours) should always be classes
+    (and not functions), so they can be copied.
 
 ## Removing checks
 

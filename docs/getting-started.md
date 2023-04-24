@@ -117,7 +117,7 @@ Our **game** object is created with 2 arguments. Let's start with the simpler on
 
 The **get_result** argument is the function that will be called to determine the result of the game.
 We create a result function that checks for all the standard end conditions: checkmate, stalemate, repetition, and the 50 move rule.
-For simplicity, we could have also imported `standard_result`for the same effect.
+For simplicity, we could have also imported `StandardResult` for the same effect.
 
 The **board** argument is the main object we'll be working with, and it is created with 3 arguments.
 Again, let's do the simpler arguments first.
@@ -160,7 +160,7 @@ from chessmaker.chess.base import Square
 from chessmaker.chess.pieces import Bishop
 from chessmaker.chess.pieces import King
 from chessmaker.chess.pieces import Pawn
-from chessmaker.chess.results import standard_result
+from chessmaker.chess.results import StandardResult
 from chessmaker.clients import start_pywebio_chess_server
 
 def _empty_line(length: int) -> list[Square]:
@@ -190,7 +190,7 @@ def create_custom_game(*_):
             players=[white, black],
             turn_iterator=turn_iterator,
         ),
-        get_result=standard_result,
+        get_result=StandardResult(),
     )
 
     return game

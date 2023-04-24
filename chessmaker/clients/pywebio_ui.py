@@ -256,7 +256,7 @@ def on_game_end(event: AfterGameEndEvent):
 
 def share_position():
     board = session_data.game.board.clone()
-    get_result = session_data.game._get_result
+    get_result = deepcopy(session_data.game._get_result)
     options = client_games[session_data.game_id].options
     piece_urls = client_games[session_data.game_id].piece_urls
 
@@ -410,7 +410,7 @@ def start_pywebio_chess_server(
                     ], name="action"),
                 ])
                 shared_position = shared_positions[get_query("position_id")]
-                new_game(lambda **_: Game(shared_position.board, shared_position.get_result),
+                new_game(lambda **_: Game(shared_position.board.clone(), deepcopy(shared_position.get_result)),
                             shared_position.options, form_result["mode"], piece_urls)
             return
 
@@ -449,5 +449,5 @@ if __name__ == "__main__":
                            "siberian_swipe", "il_vaticano", "beta_decay", "la_bastarda", "king_cant_move_to_c2",
                            "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win"],
         piece_urls=PIECE_URLS | {"Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"]}
-        , debug=True
+        ,remote_access=True, debug=True
     )

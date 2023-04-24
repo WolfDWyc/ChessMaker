@@ -20,6 +20,6 @@ class Repetition:
                 else:
                     position_hash += square.piece.__class__.__name__ + square.piece.player._id
 
-        self.positions[position_hash] += 1
+        self.positions[position_hash] = self.positions.get(position_hash, 0) + 1
         if self.positions[position_hash] >= self.needed_repetitions:
             return "Repetition - Draw"

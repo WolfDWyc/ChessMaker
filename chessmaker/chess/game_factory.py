@@ -113,11 +113,15 @@ def create_game(
     if double_check_to_win:
         result_functions.insert(0, results.double_check_to_win)
 
-    def get_result(board: Board) -> str:
-        for result_function in result_functions:
-            result = result_function(board)
-            if result:
-                return result
+    class GetResult:
+        def __init__(self):
+            self.result_functions = result_functions
+
+        def __call__(self, board: Board):
+            for result_function in self.result_functions:
+                result = result_function(board)
+                if result:
+                    return result
 
     game = Game(
         board=Board(
@@ -135,7 +139,7 @@ def create_game(
             turn_iterator=turn_iterator,
             rules=rules,
         ),
-        get_result=get_result,
+        get_result=GetResult(),
     )
 
     return game

@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from dataclasses import dataclass
 from functools import partial
 from typing import Iterable
@@ -76,8 +77,19 @@ class King(Piece):
                     return True
         return False
 
+    @contextmanager
+    def _make_kings_attackable(self):
+        for piece in self.board.get_pieces():
+            if isinstance(piece, King):
+                piece._attackable = True
+        yield
+        for piece in self.board.get_pieces():
+            if isinstance(piece, King):
+                piece._attackable = False
+
     def _is_attacked_after_move(self, piece: Piece, move_option: MoveOption) -> bool:
-        board_clone = self.board.clone()
+        with self._make_kings_attackable():
+            board_clone = self.board.clone()
         self_clone = board_clone[self.position].piece
         piece_clone = board_clone[piece.position].piece
         piece_clone.move(move_option)
@@ -163,5 +175,4 @@ class King(Piece):
         self._moved = True
 
     def clone(self):
-        # TODO: What if someone else clones the king?
-        return King(self.player, self._moved, attackable=True, castling_directions=self._castling_directions)
+        return King(self.player, self._moved, attackable=self._attackable, castling_directions=self._castling_directions)
