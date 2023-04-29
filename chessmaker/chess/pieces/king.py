@@ -79,13 +79,14 @@ class King(Piece):
 
     @contextmanager
     def _make_kings_attackable(self):
+        previous_states = {}
         for piece in self.board.get_pieces():
             if isinstance(piece, King):
+                previous_states[piece] = piece._attackable
                 piece._attackable = True
         yield
-        for piece in self.board.get_pieces():
-            if isinstance(piece, King):
-                piece._attackable = False
+        for piece, previous_state in previous_states.items():
+            piece._attackable = previous_state
 
     def _is_attacked_after_move(self, piece: Piece, move_option: MoveOption) -> bool:
         with self._make_kings_attackable():
