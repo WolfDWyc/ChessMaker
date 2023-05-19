@@ -107,6 +107,7 @@ class Board(Cloneable, EventPublisher):
         before_turn_change_event = BeforeTurnChangeEvent(self, next_player)
         self.publish(before_turn_change_event)
         if before_turn_change_event.cancelled:
+            self.turn_iterator = itertools.chain([next_player], self.turn_iterator)
             return
         self.current_player = before_turn_change_event.next_player
         self.publish(AfterTurnChangeEvent(self, self.current_player))

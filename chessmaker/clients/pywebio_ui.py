@@ -411,7 +411,7 @@ def start_pywebio_chess_server(
                 ])
                 shared_position = shared_positions[get_query("position_id")]
                 new_game(lambda **_: Game(shared_position.board.clone(), deepcopy(shared_position.get_result)),
-                            shared_position.options, form_result["mode"], piece_urls)
+                         shared_position.options, form_result["mode"], piece_urls)
             return
 
         form_result = input_group("New Game", [
@@ -447,7 +447,10 @@ if __name__ == "__main__":
         create_game,
         supported_options=["chess960", "knooks", "forced_en_passant", "knight_boosting", "omnipotent_f6_pawn",
                            "siberian_swipe", "il_vaticano", "beta_decay", "la_bastarda", "king_cant_move_to_c2",
-                           "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win"],
-        piece_urls=PIECE_URLS | {"Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"]}
-        ,remote_access=True, debug=True
+                           "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win", "duck_chess"],
+        piece_urls=PIECE_URLS |
+                   {
+                       "Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"],
+                       "Duck": ["https://i.imgur.com/ZZ2WSUq.png", "https://i.imgur.com/ZZ2WSUq.png"]
+                   }
     )

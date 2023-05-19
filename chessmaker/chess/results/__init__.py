@@ -1,4 +1,5 @@
 from .standard_result import StandardResult
+from .no_kings import no_kings
 from .checkmate import checkmate
 from .stalemate import stalemate
 from .repetition import Repetition

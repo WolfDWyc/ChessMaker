@@ -9,6 +9,7 @@ from chessmaker.chess.base.piece import Piece
 from chessmaker.chess.base.player import Player
 from chessmaker.chess.base.square import Square
 from chessmaker.chess.pieces.bishop import Bishop
+from chessmaker.chess.pieces.duck import Duck
 from chessmaker.chess.pieces.king import King
 from chessmaker.chess.pieces.knight import Knight
 from chessmaker.chess.pieces.knook.knookable_knight import KnookableKnight
@@ -16,9 +17,9 @@ from chessmaker.chess.pieces.knook.knookable_rook import KnookableRook
 from chessmaker.chess.pieces.pawn import Pawn
 from chessmaker.chess.pieces.queen import Queen
 from chessmaker.chess.pieces.rook import Rook
-from chessmaker.chess.results import stalemate, Repetition, NoCapturesOrPawnMoves, checkmate
+from chessmaker.chess.results import stalemate, Repetition, NoCapturesOrPawnMoves, checkmate, no_kings
 from chessmaker.chess.rules import ForcedEnPassant, KnightBoosting, OmnipotentF6Pawn, SiberianSwipe, IlVaticano, \
-    BetaDecay, KingCantMoveToC2, LaBastarda
+    BetaDecay, KingCantMoveToC2, LaBastarda, DuckChess
 
 
 class A:
@@ -39,13 +40,15 @@ def create_game(
         vertical_castling: bool = False,
         double_check_to_win: bool = False,
         capture_all_pieces_to_win: bool = False,
+        duck_chess: bool = False,
 ):
     _knight = Knight
     _rook = Rook
     castling_directions = ((1, 0), (-1, 0))
     if vertical_castling:
         castling_directions = tuple(list(castling_directions) + [(0, 1), (0, -1)])
-    _king = lambda player: King(player, attackable=capture_all_pieces_to_win, castling_directions=castling_directions)
+    attackable = capture_all_pieces_to_win or duck_chess
+    _king = lambda player: King(player, attackable=attackable, castling_directions=castling_directions)
     if knooks:
         _knight = KnookableKnight
         _rook = KnookableRook
@@ -100,6 +103,7 @@ def create_game(
         (omnipotent_f6_pawn, OmnipotentF6Pawn(pawn=_pawn)),
         (la_bastarda, LaBastarda(pawn=_pawn)),
         (beta_decay, BetaDecay([_rook, Bishop, _pawn])),
+        (duck_chess, DuckChess()),
     ]:
         if enabled:
             rules.append(rule)
@@ -108,7 +112,9 @@ def create_game(
     if capture_all_pieces_to_win:
         result_functions.insert(0, results.capture_all_pieces_to_win)
     else:
-        result_functions.insert(0, checkmate)
+        if not duck_chess:
+            result_functions.insert(0, checkmate)
+        result_functions.insert(0, no_kings)
 
     if double_check_to_win:
         result_functions.insert(0, results.double_check_to_win)
@@ -129,7 +135,7 @@ def create_game(
                 [Square(piece_row[i](black)) for i in range(8)],
                 [Square(_pawn(black)) for _ in range(8)],
                 _empty_line(8),
-                _empty_line(8),
+                _empty_line(7) + [Square(Duck(white) if duck_chess else None)],
                 _empty_line(8),
                 _empty_line(8),
                 [Square(_pawn(white)) for _ in range(8)],

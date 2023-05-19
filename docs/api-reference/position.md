@@ -2,7 +2,7 @@
 
 # chessmaker.chess.base.position
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\position.py#L1)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\position.py#L1)
 
 <a id="chessmaker.chess.base.position.Position"></a>
 
@@ -12,19 +12,19 @@
 class Position(NamedTuple)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\position.py#L4)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\position.py#L4)
 
 <a id="chessmaker.chess.base.position.Position.x"></a>
 
 #### x: `int`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\position.py#L5)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\position.py#L5)
 
 <a id="chessmaker.chess.base.position.Position.y"></a>
 
 #### y: `int`
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\position.py#L6)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\position.py#L6)
 
 <a id="chessmaker.chess.base.position.Position.__str__"></a>
 
@@ -34,7 +34,7 @@ class Position(NamedTuple)
 def __str__()
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\position.py#L8)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\position.py#L8)
 
 <a id="chessmaker.chess.base.position.Position.offset"></a>
 
@@ -44,5 +44,5 @@ def __str__()
 def offset(x: int, y: int)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\position.py#L11)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\position.py#L11)
 

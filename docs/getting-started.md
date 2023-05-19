@@ -21,11 +21,14 @@ if __name__ == "__main__":
         create_game, # (1)
         supported_options=["chess960", "knooks", "forced_en_passant", "knight_boosting", "omnipotent_f6_pawn",
                            "siberian_swipe", "il_vaticano", "beta_decay", "la_bastarda", "king_cant_move_to_c2",
-                           "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win"], 
-        piece_urls=PIECE_URLS | {"Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"]}, # (2)
-        remote_access=True # (3)
+                           "vertical_castling", "double_check_to_win", "capture_all_pieces_to_win", "duck_chess"],
+        piece_urls=PIECE_URLS |
+                   {
+                       "Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"],
+                       "Duck": ["https://i.imgur.com/ZZ2WSUq.png", "https://i.imgur.com/ZZ2WSUq.png"]
+                   } # (2)
+        ,remote_access=True # (3)
     )
-
 ```
 
 1. The **game_factory** argument is a function that creates a new game instance.
@@ -60,7 +63,7 @@ from chessmaker.chess.pieces import Knight
 from chessmaker.chess.pieces import Pawn
 from chessmaker.chess.pieces import Queen
 from chessmaker.chess.pieces import Rook
-from chessmaker.chess.results import checkmate, stalemate, Repetition, NoCapturesOrPawnMoves
+from chessmaker.chess.results import no_kings, checkmate, stalemate, Repetition, NoCapturesOrPawnMoves
 from chessmaker.clients import start_pywebio_chess_server
 
 
@@ -68,7 +71,7 @@ def _empty_line(length: int) -> list[Square]:
     return [Square() for _ in range(length)]
 
 def get_result(board: Board) -> str:
-    for result_function in [checkmate, stalemate, Repetition(3), NoCapturesOrPawnMoves(50)]:
+    for result_function in [no_kings, checkmate, stalemate, Repetition(3), NoCapturesOrPawnMoves(50)]:
         result = result_function(board)
         if result:
             return result

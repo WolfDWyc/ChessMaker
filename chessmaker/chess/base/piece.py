@@ -50,7 +50,7 @@ PIECE_EVENT_TYPES = (BeforeGetMoveOptionsEvent, AfterGetMoveOptionsEvent, Before
 class Piece(Cloneable, EventPublisher):
     def __init__(self, player: Player):
         super().__init__()
-        self._player = player
+        self.player = player
         self._board: Board = None
 
     def __repr__(self):
@@ -91,10 +91,6 @@ class Piece(Cloneable, EventPublisher):
 
     def on_join_board(self):
         pass
-
-    @property
-    def player(self):
-        return self._player
 
     @property
     def position(self):

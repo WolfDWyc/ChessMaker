@@ -2,7 +2,7 @@
 
 # chessmaker.chess.base.rule
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\rule.py#L1)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\rule.py#L1)
 
 <a id="chessmaker.chess.base.rule.Rule"></a>
 
@@ -12,7 +12,7 @@
 class Rule(Cloneable)
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\rule.py#L10)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\rule.py#L10)
 
 <a id="chessmaker.chess.base.rule.Rule.on_join_board"></a>
 
@@ -23,7 +23,7 @@ class Rule(Cloneable)
 def on_join_board(board: "Board")
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\rule.py#L12)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\rule.py#L12)
 
 <a id="chessmaker.chess.base.rule.Rule.clone"></a>
 
@@ -34,7 +34,7 @@ def on_join_board(board: "Board")
 def clone()
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\rule.py#L16)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\rule.py#L16)
 
 <a id="chessmaker.chess.base.rule.as_rule"></a>
 
@@ -44,5 +44,5 @@ def clone()
 def as_rule(rule_func: Callable[["Board"], None]) -> Type[Rule]
 ```
 
-[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/d55fc2f32f12721e1fe31900fd59416040ea3896/chessmaker\chess\base\rule.py#L20)
+[[view_source]](https://github.com/WolfDWyc/ChessMaker/blob/31277ef9b150ef22d5ea0caafe33d2906b6c7f48/chessmaker\chess\base\rule.py#L20)
 
