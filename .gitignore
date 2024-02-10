@@ -29,7 +29,6 @@ wheels/
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
-poetry.lock
 .installed.cfg
 *.egg
 MANIFEST

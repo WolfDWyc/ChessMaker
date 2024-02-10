@@ -4,7 +4,7 @@ An easily extendible chess implementation designed
 to support any custom rule or feature.
 
 <span style="font-size:x-large;"><b>
-Play: [https://chessmaker.azurewebsites.net](https://chessmaker.azurewebsites.net)
+Play: [https://chessmaker.fly.dev](https://chessmaker.fly.dev)
 </b></span>
 
 **Documentation**: [https://wolfdwyc.github.io/ChessMaker](https://wolfdwyc.github.io/ChessMaker)

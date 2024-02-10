@@ -452,5 +452,6 @@ if __name__ == "__main__":
                    {
                        "Knook": ["https://i.imgur.com/UiWcdEb.png", "https://i.imgur.com/g7xTVts.png"],
                        "Duck": ["https://i.imgur.com/ZZ2WSUq.png", "https://i.imgur.com/ZZ2WSUq.png"]
-                   }
+                   },
+        port=8080
     )
